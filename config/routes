@@ -4,3 +4,12 @@
 /robots.txt RobotsR GET
 
 / HomeR GET 
+
+/home HomeUserR GET
+/new-user NewUserR GET
+/create-user CreateUserR POST
+/edit-user EditUserR GET
+/update-user/#UserId UpdateUserR POST
+/follow/#UserId/#UserId FollowUserR POST
+/unfollow/#UserId/#UserId UnfollowUserR POST
+
