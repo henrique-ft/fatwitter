@@ -69,6 +69,8 @@ library
       Foundation
       Handler.Common
       Handler.Home
+      Handler.Tweet
+      Handler.User
       Import
       Import.NoFoundation
       Model
