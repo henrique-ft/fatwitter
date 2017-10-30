@@ -8,5 +8,7 @@ import Import
 -- import Network.HTTP.Types.Status
 -- import Database.Persist.Postgresql
 
-getHomeR :: Handler Html
-getHomeR = defaultLayout [whamlet|Hello World!|]
+getHomeR :: Handler Html 
+getHomeR = defaultLayout $ do 
+    $(widgetFile "home")
+ 

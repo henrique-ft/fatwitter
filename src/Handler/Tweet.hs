@@ -11,7 +11,8 @@ import Data.Text
 -- WEB
 
 getTweetsR :: Text -> Handler Html
-getTweetsR uident = defaultLayout [whamlet|getTweetsR|]
+getTweetsR uident = defaultLayout $ do 
+    $(widgetFile "tweet/tweets")
 
 -- API
 

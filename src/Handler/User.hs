@@ -9,19 +9,24 @@ import Import
 -- WEB
 
 getHomeUserR :: Handler Html
-getHomeUserR = defaultLayout [whamlet|getHomeUserR|]
+getHomeUserR = defaultLayout $ do 
+    $(widgetFile "user/home")
 
 getNewUserR :: Handler Html
-getNewUserR = defaultLayout [whamlet|getNewUserR|]
+getNewUserR = defaultLayout $ do 
+    $(widgetFile "user/new")
 
 postCreateUserR :: Handler Html
-postCreateUserR = defaultLayout [whamlet|postCreateUserR|]
+postCreateUserR = defaultLayout $ do 
+    $(widgetFile "user/new")
 
 getEditUserR :: Handler Html
-getEditUserR = defaultLayout [whamlet|getEditUserR|]
+getEditUserR = defaultLayout $ do 
+    $(widgetFile "user/edit")
 
 postUpdateUserR :: UserId -> Handler Html
-postUpdateUserR uid = defaultLayout [whamlet|postUpdateUserR|]
+postUpdateUserR uid = defaultLayout $ do 
+    $(widgetFile "user/edit")
 
 -- API
 
