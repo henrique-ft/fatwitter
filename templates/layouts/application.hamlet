@@ -1,0 +1,19 @@
+!!!
+<nav .navbar.navbar-expand-lg.navbar-light.bg-light.navbar-fatwitter>
+    <a .navbar-brand>
+        Fatwitter
+    
+    <div .collapse.navbar-collapse #navbarSupportedContent>
+        <ul .navbar-nav.mr-auto>
+            <li .nav-item>
+                <a .nav-link.nav-link-home href="/">
+                    Home
+                    <i .fa.fa-home aria-hidden="true">
+            <li .nav-item.nav-link-profile>        
+                <a .nav-link href="/">
+                    Tweets
+                    <i .fa.fa-twitter aria-hidden="true">
+            <li .nav-item.nav-link-settings>        
+                <a .nav-link href="/">
+                    Account
+                    <i .fa.fa-user aria-hidden="true">

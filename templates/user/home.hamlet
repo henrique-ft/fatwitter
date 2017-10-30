@@ -1,1 +1,6 @@
-user#home
+<div .row>
+    <div .col-md-2.col-mother.col-left-fatwitter>
+        teste
+    
+    <div .col-md-10.col-mother>
+        teste
