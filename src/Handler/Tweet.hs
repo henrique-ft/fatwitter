@@ -5,13 +5,16 @@
 module Handler.Tweet where
 
 import Import
-
 import Data.Text
+
+-- HELPERS
+
+import Helpers.Application (applicationLayout)
 
 -- WEB
 
 getTweetsR :: Text -> Handler Html
-getTweetsR uident = defaultLayout $ do 
+getTweetsR uident = applicationLayout $ do 
     $(widgetFile "tweet/tweets")
 
 -- API

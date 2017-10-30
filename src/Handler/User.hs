@@ -6,26 +6,30 @@ module Handler.User where
 
 import Import
 
+-- HELPERS
+
+import Helpers.Application (applicationLayout)
+
 -- WEB
 
 getHomeUserR :: Handler Html
-getHomeUserR = defaultLayout $ do 
+getHomeUserR = applicationLayout $ do 
     $(widgetFile "user/home")
 
 getNewUserR :: Handler Html
-getNewUserR = defaultLayout $ do 
+getNewUserR = applicationLayout $ do 
     $(widgetFile "user/new")
 
 postCreateUserR :: Handler Html
-postCreateUserR = defaultLayout $ do 
+postCreateUserR = applicationLayout $ do 
     $(widgetFile "user/new")
 
 getEditUserR :: Handler Html
-getEditUserR = defaultLayout $ do 
+getEditUserR = applicationLayout $ do 
     $(widgetFile "user/edit")
 
 postUpdateUserR :: UserId -> Handler Html
-postUpdateUserR uid = defaultLayout $ do 
+postUpdateUserR uid = applicationLayout $ do 
     $(widgetFile "user/edit")
 
 -- API

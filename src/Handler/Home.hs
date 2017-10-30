@@ -8,7 +8,12 @@ import Import
 -- import Network.HTTP.Types.Status
 -- import Database.Persist.Postgresql
 
+-- HELPERS
+
+import Helpers.Application (applicationLayout)
+
+-- WEB
+
 getHomeR :: Handler Html 
-getHomeR = defaultLayout $ do 
+getHomeR = applicationLayout $ do
     $(widgetFile "home")
- 

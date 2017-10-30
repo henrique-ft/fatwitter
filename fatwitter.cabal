@@ -71,6 +71,7 @@ library
       Handler.Home
       Handler.Tweet
       Handler.User
+      Helpers.Application
       Import
       Import.NoFoundation
       Model
