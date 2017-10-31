@@ -1,6 +1,69 @@
 <div .row>
-    <div .col-md-2.col-mother.col-left-fatwitter>
-        teste
+    <div .col-md-3.col-mother.col-left-fatwitter>
+        <div .card>
+            <div .card-body>
+                <h5 .card-title>
+                    User name
+                <p .card-text>
+                    User description
+
     
-    <div .col-md-10.col-mother>
-        teste
+    <div .col-md-9.col-mother>
+        <div .row>
+            <div .col-md-8>
+                <div .input-group.input-group-lg>
+                    <span .input-group-addon>
+                        <i .fa.fa-twitter aria-hidden="true">
+                    <input type="text" .form-control placeholder="What are you thinking now?">
+                    <button href="#" type="button" .btn.btn-info>
+                        Tweet
+        <div .row.tweet-row>
+            <div .col-md-8.tweet-col>
+                <div .card>
+                    <div .card-body>
+                        <blockquote class="blockquote mb-0">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                            <footer class="blockquote-footer">
+                                User Name
+                    <div .card-footer>
+                        <a href="">
+                            <i class="fa fa-thumbs-up" aria-hidden="true">
+                            like
+                        <a href="">
+                            <i class="fa fa-retweet" aria-hidden="true">
+                            retweet
+                        
+        <div .row.tweet-row>
+            <div .col-md-8.tweet-col>
+                <div .card>
+                    <div .card-body>
+                        <blockquote class="blockquote mb-0">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                            <footer class="blockquote-footer">
+                                User Name
+                    <div .card-footer>
+                        <a href="">
+                            <i class="fa fa-thumbs-up" aria-hidden="true">
+                            like
+                        <a href="">
+                            <i class="fa fa-retweet" aria-hidden="true">
+                            retweet
+                        
+        <div .row.tweet-row>
+            <div .col-md-8.tweet-col>
+                <div .card>
+                    <div .card-body>
+                        <blockquote class="blockquote mb-0">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                            <footer class="blockquote-footer">
+                                User Name
+                    <div .card-footer>
+                        <a href="">
+                            <i class="fa fa-thumbs-up" aria-hidden="true">
+                            like
+                        <a href="">
+                            <i class="fa fa-retweet" aria-hidden="true">
+                            retweet
+                        
+              
+            
