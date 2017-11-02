@@ -1,0 +1,25 @@
+<div .container>
+    <div .row .form-login-row>
+        <div .col-md-12>
+            <h1>
+                Login 
+            <p>
+                <i>
+                    If you not have a account yet 
+                    <a href="">
+                        sign up 
+                    for free and join us!
+        <div .col-md-5>
+            <form>
+                <div .form-group>
+                    <label for="email">
+                        Email:
+                    <input type="email" .form-control #email placeholder="Put your email">
+                <div .form-group>
+                    <label for="password">
+                        Password:
+                    <input type="password" .form-control #password placeholder="xxxxxxxxxxxxx">
+                <button type="submit" .btn .btn-info .float-right .login-button>
+                    Login
+                <button type="submit" .btn .btn-secondary .float-right>
+                    SignUp

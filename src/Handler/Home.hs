@@ -11,6 +11,7 @@ import Import
 -- HELPERS
 
 import Helpers.Application (applicationNotLoggedLayout)
+import Helpers.Home
 
 -- WEB
 

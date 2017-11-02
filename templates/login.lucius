@@ -1,0 +1,10 @@
+.form-login-row{
+    margin-top: 3em;
+    background-color: #fbfbfb;
+    padding: 3em;
+    border: 1px solid #d2d2d2;
+}
+
+.login-button{
+    margin-left: 0.5em;
+}
