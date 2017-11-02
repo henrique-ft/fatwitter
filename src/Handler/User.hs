@@ -8,7 +8,7 @@ import Import
 
 -- HELPERS
 
-import Helpers.Application (applicationLayout)
+import Helpers.Application (applicationLayout,applicationNotLoggedLayout)
 
 -- WEB
 
@@ -17,7 +17,7 @@ getHomeUserR = applicationLayout $ do
     $(widgetFile "user/home")
 
 getNewUserR :: Handler Html
-getNewUserR = applicationLayout $ do 
+getNewUserR = applicationNotLoggedLayout $ do 
     $(widgetFile "user/new")
 
 postCreateUserR :: Handler Html

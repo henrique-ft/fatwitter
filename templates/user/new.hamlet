@@ -6,7 +6,7 @@
             <p>
                 <i>
                     If you already have a account go to
-                    <a href="">
+                    <a href=@{UserLoginR}>
                         login 
         <div .col-md-5>
             <form>
