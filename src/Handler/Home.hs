@@ -17,3 +17,12 @@ import Helpers.Application (applicationNotLoggedLayout)
 getHomeR :: Handler Html 
 getHomeR = applicationNotLoggedLayout $ do
     $(widgetFile "home")
+    
+getUserLoginR :: Handler Html
+getUserLoginR = applicationNotLoggedLayout $ do
+    $(widgetFile "login")
+
+-- API
+
+postAuthenticationR :: Handler ()
+postAuthenticationR = return ()

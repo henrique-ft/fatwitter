@@ -1,0 +1,6 @@
+.intro-row{
+    margin-top: 3em;
+    background-color: #fbfbfb;
+    padding: 3em;
+    border: 1px solid #d2d2d2;
+}

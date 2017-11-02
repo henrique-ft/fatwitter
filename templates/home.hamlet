@@ -1,1 +1,7 @@
-hello
+<div .container>
+    <div .row .intro-row>
+        <div .col-md-12>
+            <h1> 
+                Fatwitter
+            <p>
+                Fatwitter is a prototype of a twitter built in Haskell and Yesod

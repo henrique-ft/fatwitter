@@ -1,0 +1,4 @@
+.navbar-fatwitter{
+    background-color: #ffffff !important;
+    border-bottom: 0.2em solid #17a2b8;
+}

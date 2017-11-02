@@ -7,6 +7,10 @@
     border-bottom: 0.2em solid #17a2b8;
 }
 
+.nav-link.active {
+    color: rgba(0,0,0,.7);
+}
+
 .col-left-fatwitter{
     background-color: #f7f7f7;
     border-right: 1px solid #cccccc;

@@ -1,6 +1,7 @@
 User json
     ident Text
     password Text Maybe
+    description Text Maybe
     UniqueUser ident
     deriving Typeable
 Email json
