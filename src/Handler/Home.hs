@@ -10,10 +10,10 @@ import Import
 
 -- HELPERS
 
-import Helpers.Application (applicationLayout)
+import Helpers.Application (applicationNotLoggedLayout)
 
 -- WEB
 
 getHomeR :: Handler Html 
-getHomeR = applicationLayout $ do
+getHomeR = applicationNotLoggedLayout $ do
     $(widgetFile "home")
