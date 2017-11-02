@@ -1,1 +1,30 @@
-user#new
+<div .container>
+    <div .row .form-new-user-row>
+        <div .col-md-12>
+            <h1>
+                New User
+            <p>
+                <i>
+                    If you already have a account go to
+                    <a href="">
+                        login 
+        <div .col-md-5>
+            <form>
+                <div .form-group>
+                    <label for="nickname">
+                        Nickname:
+                    <input type="text" name="ident" .form-control #nickname placeholder="Put your nickname">
+                <div .form-group>
+                    <label for="email">
+                        Description:
+                    <input type="description" .form-control #description placeholder="A few description about you">
+                <div .form-group>
+                    <label for="email">
+                        Email:
+                    <input type="email" name="email" .form-control #email placeholder="Put your email">
+                <div .form-group>
+                    <label for="password">
+                        Password:
+                    <input type="password" name="password" .form-control #password placeholder="xxxxxxxxxxxxx">
+                <button type="submit" .btn .btn-info .float-right>
+                    SignUp
