@@ -6,11 +6,11 @@
     <div .collapse.navbar-collapse #navbarSupportedContent>
         <ul .navbar-nav.mr-auto>
             <li .nav-item>
-                <a .nav-link.nav-link-home href="/">
+                <a .nav-link.nav-link-home href=@{HomeR}>
                     Home
                     <i .fa.fa-home aria-hidden="true">
             <li .nav-item.nav-link-profile>        
-                <a .nav-link href="/">
+                <a .nav-link href=@{HomeR}>
                     Tweets
                     <i .fa.fa-twitter aria-hidden="true">
             <li .nav-item.nav-link-settings>        

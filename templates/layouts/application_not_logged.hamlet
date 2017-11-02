@@ -6,10 +6,10 @@
     <div .collapse.navbar-collapse #navbarSupportedContent>
         <ul .navbar-nav.mr-auto>
             <li .nav-item>
-                <a .nav-link.nav-link-home href="/">
+                <a .nav-link.nav-link-home href=@{HomeR}>
                     Home
                     <i .fa.fa-home aria-hidden="true">
             <li .nav-item.nav-link-settings>        
-                <a .nav-link.nav-link-login href="/">
-                    Log In
+                <a .nav-link.nav-link-login href=@{UserLoginR}>
+                    Login
                     <i .fa.fa-user aria-hidden="true">
