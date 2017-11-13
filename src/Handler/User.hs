@@ -5,6 +5,9 @@
 module Handler.User where
 
 import Import
+import Control.Applicative
+import Data.Text
+import Database.Persist.Postgresql
 
 -- HELPERS
 
@@ -20,9 +23,11 @@ getNewUserR :: Handler Html
 getNewUserR = applicationNotLoggedLayout $ do 
     $(widgetFile "user/new")
 
-postCreateUserR :: Handler Html
-postCreateUserR = applicationLayout $ do 
-    $(widgetFile "user/new")
+postCreateUserR :: Handler Value
+postCreateUserR = do
+    user <- requireJsonBody :: Handler User
+    newUser <- runDB $ insert user
+    sendStatusJSON created201 (object ["resp" .= (user)])
 
 getEditUserR :: Handler Html
 getEditUserR = applicationLayout $ do 

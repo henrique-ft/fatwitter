@@ -5,8 +5,8 @@
 module Handler.Home where
 
 import Import
--- import Network.HTTP.Types.Status
--- import Database.Persist.Postgresql
+import qualified Data.Text as DT
+import Database.Persist.Postgresql
 
 -- HELPERS
 
@@ -23,7 +23,13 @@ getUserLoginR :: Handler Html
 getUserLoginR = applicationNotLoggedLayout $ do
     $(widgetFile "login")
 
--- API
-
-postAuthenticationR :: Handler ()
-postAuthenticationR = return ()
+postAuthenticationR :: Handler Value
+postAuthenticationR = do
+    user <- requireJsonBody :: Handler User
+    auth <- runDB $ selectFirst [UserEmail ==. (userEmail user), UserPassword ==. (userPassword user)] []
+    case auth of
+        nothing -> do
+            redirect UserLoginR
+        Just (Entity userId user) -> do
+            setSession "UserId" (DT.pack (show (fromSqlKey userId)))
+            redirect HomeR

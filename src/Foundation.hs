@@ -23,6 +23,7 @@ mkYesodData "App" $(parseRoutesFile "config/routes")
 
 instance Yesod App where
     makeLogger = return . appLogger
+    errorHandler (InvalidArgs ia) = redirect HomeUserR
 
 instance YesodPersist App where
     type YesodPersistBackend App = SqlBackend
