@@ -19,6 +19,12 @@ getTweetsR uident = applicationLayout $ do
 
 -- API
 
+postCreateTweetR :: Handler Value
+postCreateTweetR = do
+    tweet <- requireJsonBody :: Handler Tweet
+    newTweet <- runDB $ insert tweet
+    sendStatusJSON created201 (object ["resp" .= (tweet)])
+
 postTweetLikeR :: UserId -> TweetId -> Handler ()
 postTweetLikeR uid tid = return ()
 

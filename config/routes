@@ -16,6 +16,7 @@
 /user/unfollow/#UserId/#UserId UnfollowUserR POST
 
 /tweets/#Text TweetsR GET
+/tweet/create CreateTweetR POST
 /tweet/like/#UserId/#TweetId TweetLikeR POST
 /tweet/unlike/#UserId/#TweetId TweetUnlikeR POST
 /tweet/retweet/#UserId/#TweetId TweetRetweetR POST
