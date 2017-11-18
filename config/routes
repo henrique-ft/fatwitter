@@ -5,6 +5,7 @@
 
 / HomeR GET 
 /login UserLoginR GET
+/logout UserLogoutR GET
 /authentication AuthenticationR POST
 
 /home HomeUserR GET

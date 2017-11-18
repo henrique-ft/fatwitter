@@ -22,11 +22,17 @@ getHomeR = applicationNotLoggedLayout $ do
     
 getUserLoginR :: Handler Html
 getUserLoginR = do
+    flashmsg <- getMessage
     (widget,enctype) <- generateFormPost formAuthUser
     applicationNotLoggedLayout $ do
         $(widgetFile "login")
 
-postAuthenticationR :: Handler Value
+getUserLogoutR :: Handler ()
+getUserLogoutR = do
+    deleteSession "UserId"
+    redirect HomeR
+
+postAuthenticationR :: Handler ()
 postAuthenticationR = do
     ((result,_),_) <- runFormPost formAuthUser
     case result of 
@@ -37,7 +43,7 @@ postAuthenticationR = do
                     redirect UserLoginR
                 Just (Entity userId user) -> do
                     setSession "UserId" (DT.pack (show (fromSqlKey userId)))
-                    redirect HomeUserR            
+                    redirectUltDest HomeUserR            
             
         _ -> redirect UserLoginR
 

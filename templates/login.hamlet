@@ -9,6 +9,10 @@
                     <a href=@{NewUserR}>
                         sign up 
                     for free and join us!
+                    
+            $maybe msg <- flashmsg
+                <p .alert.alert-warning> #{msg}
+                
         <div .col-md-5>
             <form action=@{AuthenticationR} method=post enctype=#{enctype}>
                 ^{widget}

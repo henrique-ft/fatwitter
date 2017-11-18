@@ -25,7 +25,6 @@ type Form a = Html -> MForm Handler (FormResult a, Widget)
 
 instance Yesod App where
     makeLogger = return . appLogger
-    errorHandler (InvalidArgs ia) = redirect HomeUserR
 
 instance YesodPersist App where
     type YesodPersistBackend App = SqlBackend

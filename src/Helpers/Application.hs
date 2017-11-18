@@ -17,11 +17,19 @@ baseApplicationLayout = do
 
 -- Layout principal da aplicação
 applicationLayout :: Widget -> Handler Html
-applicationLayout x = defaultLayout $ do
-    baseApplicationLayout
-    $(widgetFile "layouts/application")
-    x
-    $(whamletFile "templates/layouts/footer.hamlet")
+applicationLayout x = do
+    user <- lookupSession "UserId"
+    case user of
+        Nothing -> do
+            setUltDestCurrent
+            setMessage "Please, enter with your email and password."
+            redirect UserLoginR
+        _ ->
+            defaultLayout $ do
+                baseApplicationLayout
+                $(widgetFile "layouts/application")
+                x
+                $(whamletFile "templates/layouts/footer.hamlet")
 
 -- Layout não logado
 applicationNotLoggedLayout :: Widget -> Handler Html 
