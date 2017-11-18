@@ -5,6 +5,7 @@ User json
     email Text
     UniqueUser ident
     deriving Typeable
+    deriving Show
 UserFollower json
     userId UserId
     followerUser UserId
