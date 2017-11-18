@@ -73,6 +73,7 @@ library
       Handler.User
       Helpers.Application
       Helpers.Home
+      Helpers.User
       Import
       Import.NoFoundation
       Model

@@ -9,22 +9,7 @@
                     <a href=@{UserLoginR}>
                         login 
         <div .col-md-5>
-            <form method="post" #new-user-form action=@{CreateUserR}>
-                <div .form-group>
-                    <label for="nickname">
-                        Nickname:
-                    <input type=text required name=ident .form-control #ident placeholder="Put your nickname">
-                <div .form-group>
-                    <label for="email">
-                        Description:
-                    <input type=text name=description .form-control #description placeholder="A few description about you">
-                <div .form-group>
-                    <label for="email">
-                        Email:
-                    <input type=email required name=email .form-control #email placeholder="Put your email">
-                <div .form-group>
-                    <label for="password">
-                        Password:
-                    <input type=password required name=password .form-control #password placeholder="xxxxxxxxxxxxx">
+            <form #new-user-form action=@{CreateUserR} method=post enctype=#{enctype}>
+                ^{widget}
                 <button type="submit" .btn .btn-info .float-right>
                     SignUp
