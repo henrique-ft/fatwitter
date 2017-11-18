@@ -33,8 +33,13 @@ applicationLayout x = do
 
 -- Layout não logado
 applicationNotLoggedLayout :: Widget -> Handler Html 
-applicationNotLoggedLayout x = defaultLayout $ do
-    baseApplicationLayout 
-    $(widgetFile "layouts/application_not_logged")
-    x
-    $(whamletFile "templates/layouts/footer.hamlet")
+applicationNotLoggedLayout x = do 
+    user <- lookupSession "UserId"
+    case user of
+        Nothing -> do
+            defaultLayout $ do
+                baseApplicationLayout 
+                $(widgetFile "layouts/application_not_logged")
+                x
+                $(whamletFile "templates/layouts/footer.hamlet")
+        _ -> redirect HomeUserR

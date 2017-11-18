@@ -45,5 +45,5 @@ postAuthenticationR = do
                     setSession "UserId" (DT.pack (show (fromSqlKey userId)))
                     redirectUltDest HomeUserR            
             
-        _ -> redirect UserLoginR
+        _ -> redirect HomeUserR
 
