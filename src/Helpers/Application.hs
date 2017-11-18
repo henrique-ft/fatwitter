@@ -5,6 +5,7 @@
 module Helpers.Application (applicationLayout,applicationNotLoggedLayout) where
 
 import Import
+import Text.Read
 
 -- Base do layout (frameworks css/js)
 baseApplicationLayout :: Widget 
@@ -18,13 +19,14 @@ baseApplicationLayout = do
 -- Layout principal da aplicação
 applicationLayout :: Widget -> Handler Html
 applicationLayout x = do
-    user <- lookupSession "UserId"
-    case user of
+    userid <- lookupSession "UserId"
+    case userid of
         Nothing -> do
             setUltDestCurrent
             setMessage "Please, enter with your email and password."
             redirect UserLoginR
-        _ ->
+        Just userid -> do
+            loggedUser <- runDB $ selectFirst [UserId ==. (read (unpack (userid)))] [] 
             defaultLayout $ do
                 baseApplicationLayout
                 $(widgetFile "layouts/application")
@@ -34,8 +36,8 @@ applicationLayout x = do
 -- Layout não logado
 applicationNotLoggedLayout :: Widget -> Handler Html 
 applicationNotLoggedLayout x = do 
-    user <- lookupSession "UserId"
-    case user of
+    userid <- lookupSession "UserId"
+    case userid of
         Nothing -> do
             defaultLayout $ do
                 baseApplicationLayout 

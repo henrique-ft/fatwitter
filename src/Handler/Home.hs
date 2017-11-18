@@ -42,7 +42,7 @@ postAuthenticationR = do
                 Nothing -> do
                     redirect UserLoginR
                 Just (Entity userId user) -> do
-                    setSession "UserId" (DT.pack (show (fromSqlKey userId)))
+                    setSession "UserId" (DT.pack (show userId))
                     redirectUltDest HomeUserR            
             
         _ -> redirect HomeUserR

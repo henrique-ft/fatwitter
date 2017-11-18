@@ -32,7 +32,7 @@ postCreateUserR = do
     case result of 
         FormSuccess user -> do 
             userid <- runDB $ insert user 
-            setSession "UserId" (DT.pack (show (fromSqlKey userid)))
+            setSession "UserId" (DT.pack (show userid))
             redirect HomeUserR
         _ -> redirect NewUserR
 
