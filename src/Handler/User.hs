@@ -51,6 +51,7 @@ postUpdateUserR :: UserId -> Handler Html
 postUpdateUserR uid = applicationLayout $ do 
     $(widgetFile "user/edit")
 
+
 -- API
 
 postFollowUserR :: UserId -> UserId -> Handler ()

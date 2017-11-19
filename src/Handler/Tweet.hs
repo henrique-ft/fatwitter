@@ -9,13 +9,28 @@ import Data.Text
 
 -- HELPERS
 
-import Helpers.Application (applicationLayout)
+import Helpers.Application (applicationLayout, applicationNotLoggedLayout)
 
 -- WEB
 
-getTweetsR :: Text -> Handler Html
-getTweetsR uident = applicationLayout $ do 
-    $(widgetFile "tweet/tweets")
+getTweetsPageR :: Text -> Handler Html
+getTweetsPageR tweetuserident = do
+    userid <- lookupSession "UserId"
+    case userid of
+        Just userid -> (tweetsPageUserLogged tweetuserident)
+        Nothing -> (tweetsPageUserNotLogged tweetuserident)
+
+tweetsPageUserLogged :: Text -> Handler Html
+tweetsPageUserLogged tweetuserident = do
+    tweetUser <- runDB $ selectFirst [UserIdent ==. tweetuserident] []
+    applicationLayout $ do
+        $(widgetFile "tweet/tweets_logged")
+    
+tweetsPageUserNotLogged :: Text -> Handler Html
+tweetsPageUserNotLogged tweetuserident = do
+    tweetUser <- runDB $ selectFirst [UserIdent ==. tweetuserident] []
+    applicationNotLoggedLayout $ do 
+        $(widgetFile "tweet/tweets_not_logged")
 
 -- API
 

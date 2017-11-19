@@ -12,7 +12,8 @@ data AuthUser = AuthUser {emailAuthUser :: Text, passwordAuthUser :: Text} deriv
 
 formUser :: Form User 
 formUser = renderBootstrap $ User 
-        <$> areq textField "Nickname: " Nothing
+        <$> areq textField "Name:" Nothing
+        <*> areq textField "Nickname (@): " Nothing
         <*> areq passwordField "Password: " Nothing
         <*> aopt textField "Description: " Nothing
         <*> areq emailField  "Email: " Nothing

@@ -2,11 +2,14 @@
     <div .col-md-3.col-mother.col-left-fatwitter>
         <div .card>
             <div .card-body>
-                <h5 .card-title>
+                <p .card-text>
                     #{userIdent loggedUser}
+                <h5 .card-title>
+                    #{userName loggedUser}
                 $maybe description <- userDescription loggedUser
                     <p .card-text>
-                        #{description}
+                        <i>
+                            #{description}
 
     
     <div .col-md-9.col-mother>

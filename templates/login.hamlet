@@ -11,7 +11,7 @@
                     for free and join us!
                     
             $maybe msg <- flashmsg
-                <p .alert.alert-warning> #{msg}
+                <p .alert.alert-info> #{msg}
                 
         <div .col-md-5>
             <form action=@{AuthenticationR} method=post enctype=#{enctype}>

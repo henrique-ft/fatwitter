@@ -1,9 +1,10 @@
 User json
+    name Text
     ident Text
     password Text
     description Text Maybe
     email Text
-    UniqueUser ident
+    UniqueIdent ident
     deriving Typeable
     deriving Show
 UserFollower json
