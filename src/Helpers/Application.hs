@@ -2,7 +2,7 @@
 {-# LANGUAGE QuasiQuotes           #-}
 {-# LANGUAGE TemplateHaskell       #-}
 {-# LANGUAGE TypeFamilies          #-}
-module Helpers.Application (applicationLayout,applicationNotLoggedLayout) where
+module Helpers.Application (applicationLayout,applicationNotLoggedLayout,redirectOut) where
 
 import Import
 import Text.Read
@@ -19,19 +19,11 @@ baseApplicationLayout = do
 -- Layout principal da aplicação
 applicationLayout :: Widget -> Handler Html
 applicationLayout x = do
-    userid <- lookupSession "UserId"
-    case userid of
-        Nothing -> do
-            setUltDestCurrent
-            setMessage "Please, enter with your email and password."
-            redirect UserLoginR
-        Just userid -> do
-            loggedUser <- runDB $ selectFirst [UserId ==. (read (unpack (userid)))] [] 
-            defaultLayout $ do
-                baseApplicationLayout
-                $(widgetFile "layouts/application")
-                x
-                $(whamletFile "templates/layouts/footer.hamlet")
+    defaultLayout $ do
+        baseApplicationLayout
+        $(widgetFile "layouts/application")
+        x
+        $(whamletFile "templates/layouts/footer.hamlet")
 
 -- Layout não logado
 applicationNotLoggedLayout :: Widget -> Handler Html 
@@ -45,3 +37,10 @@ applicationNotLoggedLayout x = do
                 x
                 $(whamletFile "templates/layouts/footer.hamlet")
         _ -> redirect HomeUserR
+
+-- Redireciona para o login
+redirectOut :: Handler Html
+redirectOut = do
+            setUltDestCurrent
+            setMessage "Please, enter with your email and password."
+            redirect UserLoginR

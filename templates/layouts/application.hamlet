@@ -1,7 +1,7 @@
 !!!
 <nav .navbar.navbar-expand-lg.navbar-light.bg-light.navbar-fatwitter>
     <a .navbar-brand>
-        Fatwitter
+        Fatwitter 
     
     <div .collapse.navbar-collapse #navbarSupportedContent>
         <ul .navbar-nav.mr-auto>

@@ -3,9 +3,10 @@
         <div .card>
             <div .card-body>
                 <h5 .card-title>
-                    User name
-                <p .card-text>
-                    User description
+                    #{userIdent loggedUser}
+                $maybe description <- userDescription loggedUser
+                    <p .card-text>
+                        #{description}
 
     
     <div .col-md-9.col-mother>

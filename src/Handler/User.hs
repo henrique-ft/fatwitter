@@ -5,20 +5,27 @@
 module Handler.User where
 
 import Import
+import Data.Maybe(fromMaybe)
 import Control.Applicative
 import qualified Data.Text as DT
 import Database.Persist.Postgresql
 
 -- HELPERS
 
-import Helpers.Application (applicationLayout,applicationNotLoggedLayout)
+import Helpers.Application (applicationLayout,applicationNotLoggedLayout,redirectOut)
 import Helpers.User (formUser)
 
 -- WEB
 
 getHomeUserR :: Handler Html
-getHomeUserR = applicationLayout $ do 
-    $(widgetFile "user/home")
+getHomeUserR = do 
+    userid <- lookupSession "UserId"
+    case userid of
+        Nothing -> redirectOut
+        Just userid -> do
+            loggedUser <- runDB $ get404 (read (unpack (userid)))
+            applicationLayout $ do 
+                $(widgetFile "user/home")
 
 getNewUserR :: Handler Html
 getNewUserR = do
