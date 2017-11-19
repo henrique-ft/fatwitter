@@ -37,6 +37,7 @@ tweetsPageUserLogged tweetuserident = do
                 Just (Entity tweetuserid tweetuser) -> do
                     isloggeduserfollowing <- isLoggedUserFollowing tweetuserid
                     isloggedusersamethan <- isLoggedUserSameThan tweetuserid
+                    loggeduserid <- return (read (unpack userid)) :: Handler UserId
                     applicationLayout $ do 
                         $(widgetFile "tweet/tweets_logged")
 

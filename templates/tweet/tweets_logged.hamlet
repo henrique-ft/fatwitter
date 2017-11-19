@@ -12,10 +12,10 @@
                             #{description}
                             
                 $if (isloggedusersamethan == False) 
-                    $if (isloggeduserfollowing) 
-                        <button type="button" .btn.btn-info" data-currentuser="#{show $ userid}" data-tweetsuser="#{show $ tweetuserid}" data-following=1>Following
+                    $if (isloggeduserfollowing)
+                        <button type="button" .btn.btn-info" data-currentuserid="#{show $ (fromSqlKey loggeduserid) }" data-tweetsuserid="#{(show (fromSqlKey tweetuserid))}" data-following=1>Following
                     $else
-                        <button type="button" .btn.btn-outline-info  data-currentuser="#{show $ userid}"" data-tweetsuser="#{show $ tweetuserid}" data-following=0>Follow
+                        <button type="button" .btn.btn-outline-info  data-currentuserid="#{show $ (fromSqlKey loggeduserid) }"" data-tweetsuserid="#{(show (fromSqlKey tweetuserid))}" data-following=0>Follow
                 
     <div .col-md-9.col-mother>
         <div .row.tweet-row>
