@@ -5,7 +5,7 @@
 module Handler.User where
 
 import Import
-import Data.Maybe(fromMaybe)
+import Data.Maybe
 import Control.Applicative
 import qualified Data.Text as DT
 import Database.Persist.Postgresql
@@ -23,7 +23,7 @@ getHomeUserR = do
     case userid of
         Nothing -> redirectOut
         Just userid -> do
-            loggedUser <- runDB $ get404 (read (unpack (userid)))
+            loggeduser <- runDB $ get404 (read (unpack (userid)))
             applicationLayout $ do 
                 $(widgetFile "user/home")
 
@@ -50,7 +50,6 @@ getEditUserR = applicationLayout $ do
 postUpdateUserR :: UserId -> Handler Html
 postUpdateUserR uid = applicationLayout $ do 
     $(widgetFile "user/edit")
-
 
 -- API
 

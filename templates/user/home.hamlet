@@ -3,10 +3,10 @@
         <div .card>
             <div .card-body>
                 <p .card-text>
-                    #{userIdent loggedUser}
+                    #{userIdent loggeduser}
                 <h5 .card-title>
-                    #{userName loggedUser}
-                $maybe description <- userDescription loggedUser
+                    #{userName loggeduser}
+                $maybe description <- userDescription loggeduser
                     <p .card-text>
                         <i>
                             #{description}

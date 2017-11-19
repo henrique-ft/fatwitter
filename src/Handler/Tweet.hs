@@ -5,11 +5,15 @@
 module Handler.Tweet where
 
 import Import
-import Data.Text
+import Data.Maybe
+import qualified Data.Text as DT
+import Database.Persist.Postgresql
+import Control.Applicative
 
 -- HELPERS
 
-import Helpers.Application (applicationLayout, applicationNotLoggedLayout)
+import Helpers.Application (applicationLayout, applicationNotLoggedLayout, redirectOut)
+import Helpers.User (isLoggedUserSameThan, isLoggedUserFollowing)
 
 -- WEB
 
@@ -17,20 +21,33 @@ getTweetsPageR :: Text -> Handler Html
 getTweetsPageR tweetuserident = do
     userid <- lookupSession "UserId"
     case userid of
-        Just userid -> (tweetsPageUserLogged tweetuserident)
         Nothing -> (tweetsPageUserNotLogged tweetuserident)
+        Just userid -> (tweetsPageUserLogged tweetuserident)
 
 tweetsPageUserLogged :: Text -> Handler Html
 tweetsPageUserLogged tweetuserident = do
-    tweetUser <- runDB $ selectFirst [UserIdent ==. tweetuserident] []
-    applicationLayout $ do
-        $(widgetFile "tweet/tweets_logged")
-    
+    userid <- lookupSession "UserId"
+    case userid of
+        Nothing -> redirectOut
+        Just userid -> do
+            loggeduser <- runDB $ get404 (read (unpack (userid))) :: Handler User
+            tweetuser <- runDB $ selectFirst [UserIdent ==. tweetuserident] []
+            case tweetuser of
+                Nothing -> notFound
+                Just (Entity tweetuserid tweetuser) -> do
+                    isloggeduserfollowing <- isLoggedUserFollowing tweetuserid
+                    isloggedusersamethan <- isLoggedUserSameThan tweetuserid
+                    applicationLayout $ do 
+                        $(widgetFile "tweet/tweets_logged")
+
 tweetsPageUserNotLogged :: Text -> Handler Html
 tweetsPageUserNotLogged tweetuserident = do
-    tweetUser <- runDB $ selectFirst [UserIdent ==. tweetuserident] []
-    applicationNotLoggedLayout $ do 
-        $(widgetFile "tweet/tweets_not_logged")
+    tweetuser <- runDB $ selectFirst [UserIdent ==. tweetuserident] []
+    case tweetuser of
+        Nothing -> notFound
+        Just (Entity tweetuserid tweetuser) ->
+            applicationNotLoggedLayout $ do
+                $(widgetFile "tweet/tweets_not_logged")
 
 -- API
 

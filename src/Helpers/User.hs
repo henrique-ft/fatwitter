@@ -2,7 +2,13 @@
 {-# LANGUAGE QuasiQuotes           #-}
 {-# LANGUAGE TemplateHaskell       #-}
 {-# LANGUAGE TypeFamilies          #-}
-module Helpers.User(formUser, formAuthUser, AuthUser, emailAuthUser, passwordAuthUser)where
+module Helpers.User(formUser, 
+                    formAuthUser,
+                    AuthUser, 
+                    emailAuthUser, 
+                    passwordAuthUser,
+                    isLoggedUserFollowing, 
+                    isLoggedUserSameThan)where
 
 import qualified Data.Text as DT
 
@@ -22,3 +28,23 @@ formAuthUser :: Form AuthUser
 formAuthUser = renderBootstrap $ AuthUser 
         <$> areq emailField  "Email: " Nothing
         <*> areq passwordField "Password: " Nothing
+
+isLoggedUserFollowing :: UserId -> Handler Bool
+isLoggedUserFollowing userid = do
+    currentuserid <- lookupSession "UserId"
+    case currentuserid of
+        Nothing -> return False
+        Just currentuserid -> do
+            tweetuser <- runDB $ selectFirst [UserFollowerUserId ==. userid, UserFollowerFollowerUser ==. (read (unpack (currentuserid)))] []
+            case tweetuser of
+                Nothing -> return False
+                Just _ -> return True
+
+isLoggedUserSameThan :: UserId -> Handler Bool
+isLoggedUserSameThan userid = do
+    currentuserid <- lookupSession "UserId"
+    case currentuserid of
+        Nothing -> return False
+        Just currentuserid -> return (userid == (read (unpack (currentuserid))))
+
+--(read (unpack (lookupSession "UserId")))

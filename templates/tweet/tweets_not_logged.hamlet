@@ -1,1 +1,43 @@
-tweet#tweets
+<div .row>
+    <div .col-md-3.col-mother.col-left-fatwitter>
+        <div .card>
+            <div .card-body>
+                <p .card-text>
+                    #{userIdent tweetuser}
+                <h5 .card-title>
+                    #{userName tweetuser}
+                $maybe description <- userDescription tweetuser
+                    <p .card-text>
+                        <i>
+                            #{description}
+    
+    <div .col-md-9.col-mother>
+        <div .row.tweet-row>
+            <div .col-md-8.tweet-col>
+                <div .card>
+                    <div .card-body>
+                        <blockquote class="blockquote mb-0">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                            <footer class="blockquote-footer">
+                                User Name
+                        
+        <div .row.tweet-row>
+            <div .col-md-8.tweet-col>
+                <div .card>
+                    <div .card-body>
+                        <blockquote class="blockquote mb-0">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                            <footer class="blockquote-footer">
+                                User Name
+                        
+        <div .row.tweet-row>
+            <div .col-md-8.tweet-col>
+                <div .card>
+                    <div .card-body>
+                        <blockquote class="blockquote mb-0">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                            <footer class="blockquote-footer">
+                                User Name
+                        
+              
+            

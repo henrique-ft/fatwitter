@@ -1,3 +1,21 @@
-body{
-color: blue;
+.tweet-row{
+    margin: 1em 0;
+}
+
+.tweet-col{
+    padding: 0px;
+}
+
+.tweet-col .card-footer a{
+    margin-right: 1em;
+    color: #717171 !important;
+}
+
+.tweet-col .card-footer a.active{
+    color: #17a2b8 !important;
+}
+
+.tweet-col .card-footer a:hover{
+    color: #17a2b8 !important;
+    text-decoration: none;
 }
