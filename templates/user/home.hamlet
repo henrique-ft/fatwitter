@@ -10,7 +10,13 @@
                     <p .card-text>
                         <i>
                             #{description}
-
+                <p .card-text .followers-card>
+                    <span #following-number>
+                        #{show $ followingnumber}
+                    following /
+                    <span #followers-number>
+                        #{show $ followersnumber}
+                    follower(s)
     
     <div .col-md-9.col-mother>
         <div .row>
@@ -18,56 +24,28 @@
                 <div .input-group.input-group-lg>
                     <span .input-group-addon>
                         <i .fa.fa-twitter aria-hidden="true">
-                    <input type="text" .form-control placeholder="What are you thinking now?">
-                    <button href="#" type="button" .btn.btn-info>
+                    <input type="text" #tweet-input data-userid="#{show $ (fromSqlKey loggeduserid)}" .form-control placeholder="What are you thinking now?">
+                    <button href="#" #button-tweet-input type="button" .btn.btn-info>
                         Tweet
-        <div .row.tweet-row>
-            <div .col-md-8.tweet-col>
-                <div .card>
-                    <div .card-body>
-                        <blockquote class="blockquote mb-0">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                            <footer class="blockquote-footer">
-                                User Name
-                    <div .card-footer>
-                        <a href="">
-                            <i class="fa fa-thumbs-up" aria-hidden="true">
-                            like
-                        <a href="">
-                            <i class="fa fa-retweet" aria-hidden="true">
-                            retweet
-                        
-        <div .row.tweet-row>
-            <div .col-md-8.tweet-col>
-                <div .card>
-                    <div .card-body>
-                        <blockquote class="blockquote mb-0">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                            <footer class="blockquote-footer">
-                                User Name
-                    <div .card-footer>
-                        <a href="">
-                            <i class="fa fa-thumbs-up" aria-hidden="true">
-                            like
-                        <a href="">
-                            <i class="fa fa-retweet" aria-hidden="true">
-                            retweet
-                        
-        <div .row.tweet-row>
-            <div .col-md-8.tweet-col>
-                <div .card>
-                    <div .card-body>
-                        <blockquote class="blockquote mb-0">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                            <footer class="blockquote-footer">
-                                User Name
-                    <div .card-footer>
-                        <a href="">
-                            <i class="fa fa-thumbs-up" aria-hidden="true">
-                            like
-                        <a href="">
-                            <i class="fa fa-retweet" aria-hidden="true">
-                            retweet
-                        
+        <img #loading-image src=@{StaticR img_loader_gif}>
+        <div #tweet-container>
+            <div .row.tweet-row>
+                <div .col-md-8.tweet-col>
+                    <div .card>
+                        <div .card-body>
+                            <blockquote class="blockquote mb-0">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                                <footer class="blockquote-footer">
+                                    User Name
+                        <div .card-footer>
+                            <a href="">
+                                <i class="fa fa-thumbs-up" aria-hidden="true">
+                                like
+                            <a href="">
+                                <i class="fa fa-retweet" aria-hidden="true">
+                                retweet
+                            
+
+                            
               
             

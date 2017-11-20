@@ -24,6 +24,9 @@ getHomeUserR = do
         Nothing -> redirectOut
         Just userid -> do
             loggeduser <- runDB $ get404 (read (unpack (userid)))
+            followersnumber <- runDB $ count [UserFollowerUserId ==. (read (unpack (userid)))]
+            followingnumber <- runDB $ count [UserFollowerFollowerUser ==. (read (unpack (userid)))]
+            loggeduserid <- return (read (unpack userid)) :: Handler UserId
             applicationLayout $ do 
                 $(widgetFile "user/home")
 

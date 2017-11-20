@@ -27,7 +27,7 @@
     color: gray;
 }
 
-#followers-number {
+#followers-number, #following-number {
     color: black;
     font-weight: bold;
 }

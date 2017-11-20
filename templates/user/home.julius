@@ -1,1 +1,35 @@
 $('.nav-link-home').addClass('active');
+
+/* 
+* Sends a tweet 
+*/
+
+// '{"userId": 9, "description": "dawd", "isretweet": false, "parenttweetid": null, "date": "2017-11-20 12:46:54"}'
+
+$('#button-tweet-input').click(function(){
+
+    tweet = {
+                userId: parseInt($('#tweet-input').data().userid),
+                description: $('#tweet-input').val(),
+                isretweet: false,
+                parenttweetid: null,
+                date: moment().format('YYYY-MM-DD HH:mm:ss'),
+            };
+
+    console.log(tweet);
+
+    $.ajax({
+            url: "@{CreateTweetR}",
+            type: "post",
+       		dataType: "json",
+       		cache: false,
+            contentType:"application/json",
+            data: JSON.stringify(tweet),
+            success: function (data) {
+                console.log(data);
+            }
+        });
+
+    $("#tweet-container").hide();
+
+});

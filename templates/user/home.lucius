@@ -19,3 +19,14 @@
     color: #17a2b8 !important;
     text-decoration: none;
 }
+
+.followers-card {
+    padding-top: 10px;
+    font-size: 0.8em;
+    color: gray;
+}
+
+#followers-number, #following-number {
+    color: black;
+    font-weight: bold;
+}

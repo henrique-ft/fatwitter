@@ -11,37 +11,13 @@
                         <i>
                             #{description}
                 <p .card-text .followers-card>
+                    <span #following-number>
+                        #{show $ followingnumber}
+                    following /
                     <span #followers-number>
                         #{show $ followersnumber}
-                    follower(s) 
-   
+                    follower(s)
+
     <div .col-md-9.col-mother>
-        <div .row.tweet-row>
-            <div .col-md-8.tweet-col>
-                <div .card>
-                    <div .card-body>
-                        <blockquote class="blockquote mb-0">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                            <footer class="blockquote-footer">
-                                User Name
-                        
-        <div .row.tweet-row>
-            <div .col-md-8.tweet-col>
-                <div .card>
-                    <div .card-body>
-                        <blockquote class="blockquote mb-0">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                            <footer class="blockquote-footer">
-                                User Name
-                        
-        <div .row.tweet-row>
-            <div .col-md-8.tweet-col>
-                <div .card>
-                    <div .card-body>
-                        <blockquote class="blockquote mb-0">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                            <footer class="blockquote-footer">
-                                User Name
-                        
-              
-            
+        <img #loading-image src=@{StaticR img_loader_gif}>
+        <div #tweet-container>

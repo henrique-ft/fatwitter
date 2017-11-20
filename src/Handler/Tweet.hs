@@ -38,6 +38,7 @@ tweetsPageUserLogged tweetuserident = do
                     isloggeduserfollowing <- isLoggedUserFollowing tweetuserid
                     isloggedusersamethan <- isLoggedUserSameThan tweetuserid
                     followersnumber <- runDB $ count [UserFollowerUserId ==. tweetuserid]
+                    followingnumber <- runDB $ count [UserFollowerFollowerUser ==. tweetuserid]
                     loggeduserid <- return (read (unpack userid)) :: Handler UserId
                     applicationLayout $ do 
                         $(widgetFile "tweet/tweets_logged")
@@ -49,6 +50,7 @@ tweetsPageUserNotLogged tweetuserident = do
         Nothing -> notFound
         Just (Entity tweetuserid tweetuser) -> do
             followersnumber <- runDB $ count [UserFollowerUserId ==. tweetuserid]
+            followingnumber <- runDB $ count [UserFollowerFollowerUser ==. tweetuserid]
             applicationNotLoggedLayout $ do
                 $(widgetFile "tweet/tweets_not_logged")
 
@@ -59,6 +61,18 @@ postCreateTweetR = do
     tweet <- requireJsonBody :: Handler Tweet
     newTweet <- runDB $ insert tweet
     sendStatusJSON created201 (object ["resp" .= (tweet)])
+
+getTweetsUserLoggedR :: UserId -> Handler ()
+getTweetsUserLoggedR userid = return ()
+
+getTweetsUserUnloggedR :: UserId -> Handler Value
+getTweetsUserUnloggedR userid = do
+    user <- runDB $ get404 userid 
+    tweets <- runDB $ selectList [TweetUserId ==. userid] []
+    sendStatusJSON ok200 (object ["resp" .= tweets, "user" .= user])
+
+getTweetsHomeR :: UserId -> Handler ()
+getTweetsHomeR userid = return ()
 
 postTweetLikeR :: UserId -> TweetId -> Handler ()
 postTweetLikeR uid tid = return ()
