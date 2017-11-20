@@ -10,7 +10,11 @@
                     <p .card-text>
                         <i>
                             #{description}
-    
+                <p .card-text .followers-card>
+                    <span #followers-number>
+                        #{show $ followersnumber}
+                    follower(s) 
+   
     <div .col-md-9.col-mother>
         <div .row.tweet-row>
             <div .col-md-8.tweet-col>

@@ -11,6 +11,10 @@ $('#button-follow').click(function(){
         $("#button-follow").addClass('btn-info');
         $("#button-follow").html('Following');
         $("#button-follow").data("following", 1);
+        
+        sum = parseInt($("#followers-number").html());
+        $("#followers-number").html(String(sum + 1));
+        
 
     } else {
 
@@ -23,5 +27,9 @@ $('#button-follow').click(function(){
         $("#button-follow").addClass('btn-outline-info');
         $("#button-follow").html('Follow');
         $("#button-follow").data("following", 0);
+
+        subtract = parseInt($("#followers-number").html());
+        $("#followers-number").html(String(subtract - 1));
+
     }
 })

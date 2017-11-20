@@ -37,6 +37,7 @@ tweetsPageUserLogged tweetuserident = do
                 Just (Entity tweetuserid tweetuser) -> do
                     isloggeduserfollowing <- isLoggedUserFollowing tweetuserid
                     isloggedusersamethan <- isLoggedUserSameThan tweetuserid
+                    followersnumber <- runDB $ count [UserFollowerUserId ==. tweetuserid]
                     loggeduserid <- return (read (unpack userid)) :: Handler UserId
                     applicationLayout $ do 
                         $(widgetFile "tweet/tweets_logged")
@@ -46,7 +47,8 @@ tweetsPageUserNotLogged tweetuserident = do
     tweetuser <- runDB $ selectFirst [UserIdent ==. tweetuserident] []
     case tweetuser of
         Nothing -> notFound
-        Just (Entity tweetuserid tweetuser) ->
+        Just (Entity tweetuserid tweetuser) -> do
+            followersnumber <- runDB $ count [UserFollowerUserId ==. tweetuserid]
             applicationNotLoggedLayout $ do
                 $(widgetFile "tweet/tweets_not_logged")
 

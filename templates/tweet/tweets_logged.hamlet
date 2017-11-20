@@ -16,6 +16,11 @@
                         <button type="button" #button-follow .btn.btn-info" data-currentuserid="#{show $ (fromSqlKey loggeduserid) }" data-tweetsuserid="#{(show (fromSqlKey tweetuserid))}" data-following=1>Following
                     $else
                         <button type="button" #button-follow .btn.btn-outline-info  data-currentuserid="#{show $ (fromSqlKey loggeduserid) }"" data-tweetsuserid="#{(show (fromSqlKey tweetuserid))}" data-following=0>Follow
+                <br>
+                <p .card-text .followers-card>
+                    <span #followers-number>
+                        #{show $ followersnumber}
+                    follower(s) 
                 
     <div .col-md-9.col-mother>
         <div .row.tweet-row>
