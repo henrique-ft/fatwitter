@@ -1,1 +1,27 @@
-alert('teste');
+$('#button-follow').click(function(){
+
+    if($(this).data().following == 0){
+
+        $.ajax({
+            url: "@{FollowUserR (loggeduserid) (tweetuserid)}",
+            type: "POST"
+        });
+
+        $("#button-follow").removeClass('btn-outline-info');
+        $("#button-follow").addClass('btn-info');
+        $("#button-follow").html('Following');
+        $("#button-follow").data("following", 1);
+
+    } else {
+
+        $.ajax({
+            url: "@{UnfollowUserR (loggeduserid) (tweetuserid)}",
+            type: "DELETE"
+        });
+        
+        $("#button-follow").removeClass('btn-info');
+        $("#button-follow").addClass('btn-outline-info');
+        $("#button-follow").html('Follow');
+        $("#button-follow").data("following", 0);
+    }
+})

@@ -53,8 +53,14 @@ postUpdateUserR uid = applicationLayout $ do
 
 -- API
 
-postFollowUserR :: UserId -> UserId -> Handler ()
-postFollowUserR uidFollowing uidFollowed = return ()
+postFollowUserR :: UserId -> UserId -> Handler Value
+postFollowUserR userfollowingid userfollowedid = do 
+    userfollowerid <- runDB $ insert (UserFollower userfollowedid userfollowingid)
+    sendStatusJSON created201 (object ["resp" .= (fromSqlKey userfollowerid)])
 
-postUnfollowUserR :: UserId -> UserId -> Handler ()
-postUnfollowUserR uidFollowing uidFollowed = return ()
+
+deleteUnfollowUserR :: UserId -> UserId -> Handler Value
+deleteUnfollowUserR userfollowingid userfollowedid = do
+    runDB $ deleteWhere [UserFollowerUserId ==. userfollowedid, UserFollowerFollowerUser ==. userfollowingid]
+    sendStatusJSON noContent204 (object ["userfollowingiddeleted" .= userfollowingid, "userfollowediddeleted" .= userfollowedid])
+

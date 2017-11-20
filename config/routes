@@ -14,7 +14,7 @@
 /user/edit EditUserR GET
 /user/update/#UserId UpdateUserR POST
 /user/follow/#UserId/#UserId FollowUserR POST
-/user/unfollow/#UserId/#UserId UnfollowUserR POST
+/user/unfollow/#UserId/#UserId UnfollowUserR DELETE
 
 /tweets/#Text TweetsPageR GET
 /tweet/create CreateTweetR POST
