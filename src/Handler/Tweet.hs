@@ -1,7 +1,7 @@
-{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE QuasiQuotes           #-}
-{-# LANGUAGE TemplateHaskell       #-}
-{-# LANGUAGE TypeFamilies          #-}
 module Handler.Tweet where
 
 import Import
@@ -62,8 +62,31 @@ postCreateTweetR = do
     newTweet <- runDB $ insert tweet
     sendStatusJSON created201 (object ["resp" .= (tweet)])
 
-getTweetsUserLoggedR :: UserId -> Handler ()
-getTweetsUserLoggedR userid = return ()
+getTweetsUserLoggedR :: UserId -> UserId -> Handler Value
+getTweetsUserLoggedR tweetsuserid loggeduserid = do
+    user <- runDB $ get404 tweetsuserid 
+    -- Tweets
+    tweets <- runDB $ selectList [TweetUserId ==. tweetsuserid] []
+    tweetsids <- return $ Prelude.map entityKey tweets
+    -- Likes
+    tweetslikes <- sequence $ Prelude.map (\tweetid -> runDB $ selectList [TweetLikeTweetId ==. tweetid] []) tweetsids
+    tweetsloggeduserlikeentity <- runDB $ selectList [TweetLikeUserId ==. tweetsuserid] []
+    tweetsloggeduserlike <- return $ Prelude.map entityKey tweetsloggeduserlikeentity
+    -- Retweets
+    tweetsretweets <- sequence $ Prelude.map (\tweetid -> runDB $ selectList [TweetParenttweetid ==. (Just tweetid)] []) tweetsids
+    tweetsloggeduserretweetentity <- runDB $ selectList [TweetUserId ==. tweetsuserid, TweetIsretweet ==. True] []
+    tweetsloggeduserretweet <- return $ Prelude.map entityKey tweetsloggeduserretweetentity
+    -- Response
+    sendStatusJSON ok200 (object ["tweets" .= tweets, "tweetlikes" .= tweetslikes, "tweetsretweets" .= tweetsretweets, "tweetsloggeduserlike" .= tweetsloggeduserlike, "tweetsloggeduserretweet" .= tweetsloggeduserretweet])
+
+-- getExpectadoresFR :: SerieId -> Handler Value
+-- getExpectadoresFR serieid = do 
+--     listaEntityUsuarioSerie <- runDB $ selectList [UsuarioSerieSerieid ==. serieid] [] 
+--     listaUsuarioSerie <- return $ map entityVal listaEntityUsuarioSerie
+--     idsUsuario <- return $ map usuarioSerieUsrid listaUsuarioSerie
+--     usuarios <- sequence $ map (\x -> runDB $ get404 x) idsUsuario 
+--     sendStatusJSON ok200 (object ["resp" .= usuarios])
+
 
 getTweetsUserUnloggedR :: UserId -> Handler Value
 getTweetsUserUnloggedR userid = do

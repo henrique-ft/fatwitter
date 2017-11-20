@@ -18,7 +18,7 @@ Tweet json
     parenttweetid TweetId Maybe
     date Text sqltype = datetime
     deriving Show
-TweetLike
+TweetLike json
     userId UserId
     tweetId TweetId
 

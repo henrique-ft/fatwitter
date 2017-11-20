@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-    $.get("/tweets/get-unlogged/9", function(data) {
+    $.get("@{TweetsUserUnloggedR tweetuserid}", function(data) {
 
         $("#loading-image").hide();
 

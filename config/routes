@@ -18,7 +18,7 @@
 
 /tweets/#Text TweetsPageR GET
 /tweets/get-unlogged/#UserId TweetsUserUnloggedR GET
-/tweets/get-logged/#UserId TweetsUserLoggedR GET
+/tweets/get-logged/#UserId/#UserId TweetsUserLoggedR GET
 /tweets/get-home/#UserId TweetsHomeR GET
 /tweet/create CreateTweetR POST
 /tweet/like/#UserId/#TweetId TweetLikeR POST
