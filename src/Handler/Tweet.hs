@@ -64,7 +64,9 @@ postCreateTweetR = do
 
 getTweetsUserLoggedR :: UserId -> UserId -> Handler Value
 getTweetsUserLoggedR tweetsuserid loggeduserid = do
+    -- Users
     user <- runDB $ get404 tweetsuserid 
+    loggeduser <- runDB $ get404 loggeduserid :: Handler User
     -- Tweets
     tweets <- runDB $ selectList [TweetUserId ==. tweetsuserid] []
     tweetsids <- return $ Prelude.map entityKey tweets
@@ -77,16 +79,7 @@ getTweetsUserLoggedR tweetsuserid loggeduserid = do
     tweetsloggeduserretweetentity <- runDB $ selectList [TweetUserId ==. tweetsuserid, TweetIsretweet ==. True] []
     tweetsloggeduserretweet <- return $ Prelude.map entityKey tweetsloggeduserretweetentity
     -- Response
-    sendStatusJSON ok200 (object ["tweets" .= tweets, "tweetlikes" .= tweetslikes, "tweetsretweets" .= tweetsretweets, "tweetsloggeduserlike" .= tweetsloggeduserlike, "tweetsloggeduserretweet" .= tweetsloggeduserretweet])
-
--- getExpectadoresFR :: SerieId -> Handler Value
--- getExpectadoresFR serieid = do 
---     listaEntityUsuarioSerie <- runDB $ selectList [UsuarioSerieSerieid ==. serieid] [] 
---     listaUsuarioSerie <- return $ map entityVal listaEntityUsuarioSerie
---     idsUsuario <- return $ map usuarioSerieUsrid listaUsuarioSerie
---     usuarios <- sequence $ map (\x -> runDB $ get404 x) idsUsuario 
---     sendStatusJSON ok200 (object ["resp" .= usuarios])
-
+    sendStatusJSON ok200 (object ["tweets" .= tweets, "tweetlikes" .= tweetslikes, "tweetsretweets" .= tweetsretweets, "tweetsloggeduserlike" .= tweetsloggeduserlike, "tweetsloggeduserretweet" .= tweetsloggeduserretweet, "loggeduser" .= loggeduser, "loggeduserid" .= loggeduserid, "tweetuser" .= user, "tweetuserid" .= tweetsuserid])
 
 getTweetsUserUnloggedR :: UserId -> Handler Value
 getTweetsUserUnloggedR userid = do

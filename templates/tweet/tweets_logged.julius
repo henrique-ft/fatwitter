@@ -1,5 +1,9 @@
-$('#button-follow').click(function(){
+/*
+*  Follow and Unfollow a User
+*/
 
+$('#button-follow').click(function(){
+    
     if($(this).data().following == 0){
 
         $.ajax({
@@ -33,3 +37,62 @@ $('#button-follow').click(function(){
 
     }
 })
+
+/*
+*  Tweets List
+*/
+
+$(document).ready(function(){
+
+    $.get("/tweets/get-logged/9/9", function(data) {
+
+        $("#loading-image").hide();
+
+       // console.log(data.tweets);
+        
+        tweeetrows = data.tweets.reduce(function(olddiv,tweet,i){
+           // console.log(data.tweetuser);
+           // console.log(i);
+
+            isLiked = data.tweetsloggeduserlike.includes(parseInt(tweet.id))? 1 : 0;
+            isRetweeted = data.tweetsloggeduserretweet.includes(parseInt(tweet.id))? 1 : 0;
+
+            likes = data.tweetlikes[i].length == 0 ? '': data.tweetlikes[i].length;
+            retweets = data.tweetsretweets[i].length == 0 ? '': data.tweetsretweets[i].length;
+
+            return "<div class='row tweet-row'>" +
+                    "<div class='col-md-8 tweet-col'>" +
+                        "<div class='card'>" +
+                            "<div class='card-body'>" +
+                                "<blockquote class='blockquote mb-0'>" +
+                                    "<p>"+tweet.description+"</p>" +
+                                    "<footer class='blockquote-footer'>" +
+                                    moment(tweet.date.replace(" ","T")).format('DD/MM/YYYY')+
+                                    data.tweetuser.ident +
+                                    "</footer>"+
+                                "</blockquote>" +
+                            "</div>" +
+                            "<div class='card-footer'>" +
+                                "<a class='tweet-like' data-tweetid='"+tweet.id+"' href='#'>" +
+                                    "<span class='tweet-like-number' data-tweetid='"+tweet.id+"' data-liked='"+isLiked+"'>"+likes+"</span>"+
+                                    "<i class='fa fa-thumbs-up' aria-hidden='true'></i>" +
+                                    " like" +
+                                "</a>"+
+                                "<a class='tweet-retweet' data-tweetid='"+tweet.id+"' href='#'>" +
+                                    "<span class='tweet-retweet-number' data-tweetid='"+tweet.id+"' data-retweeted='"+isRetweeted+"'>"+retweets+"</span>"+
+                                    "<i class='fa fa-retweet' aria-hidden='true'></i>" +
+                                    " retweet" +
+                                "</a>"+
+                            "</div>" +
+                        "</div>" +
+                    "</div>" +
+                "</div>" +
+                olddiv;
+
+        }, '');
+        
+       //  console.log(tweeetrows);
+
+        $("#tweet-container").html(tweeetrows);
+    });
+});
