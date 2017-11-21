@@ -2,7 +2,7 @@
 {-# LANGUAGE QuasiQuotes           #-}
 {-# LANGUAGE TemplateHaskell       #-}
 {-# LANGUAGE TypeFamilies          #-}
-module Helpers.Tweet(likesByTweetId,retweetsByTweetId) where
+module Helpers.Tweet(likesByTweetId,retweetsByTweetId,getTweetUserIdWithRetweetFilter) where
 
 import Import
 
@@ -19,3 +19,11 @@ retweetsByTweetId tweetid = do
     case (tweetParenttweetid tweet) of
         Nothing -> runDB $ selectList [TweetParenttweetid ==. (Just tweetid)] []
         Just parenttweetid -> runDB $ selectList [TweetParenttweetid ==. (Just parenttweetid)] []
+
+getTweetUserIdWithRetweetFilter :: Tweet -> Handler UserId
+getTweetUserIdWithRetweetFilter tweet = do 
+    case (tweetParenttweetid tweet) of
+        Nothing -> return (tweetUserId tweet)
+        Just parenttweetid -> do
+            parenttweet <- runDB $ get404 parenttweetid
+            return (tweetUserId parenttweet) 
