@@ -14,6 +14,7 @@ import Control.Applicative
 
 import Helpers.Application (applicationLayout, applicationNotLoggedLayout, redirectOut)
 import Helpers.User (isLoggedUserSameThan, isLoggedUserFollowing)
+import Helpers.Tweet (retweetsByTweetId, likesByTweetId)
 
 -- WEB
 
@@ -70,22 +71,32 @@ getTweetsUserLoggedR loggeduserid tweetsuserid = do
     -- Tweets
     tweets <- runDB $ selectList [TweetUserId ==. tweetsuserid] []
     tweetsids <- return $ Prelude.map entityKey tweets
+    tweetsentities <- return $ Prelude.map entityVal tweets
+    tweetsusersids <- return $ Prelude.map tweetUserId tweetsentities
     -- Likes
-    tweetslikes <- sequence $ Prelude.map (\tweetid -> runDB $ selectList [TweetLikeTweetId ==. tweetid] []) tweetsids
+    tweetslikes <- sequence $ Prelude.map likesByTweetId tweetsids -- Essa função deve ser mudada
     tweetsloggeduserlikeentity <- runDB $ selectList [TweetLikeUserId ==. tweetsuserid] []
     tweetsloggeduserlike <- return $ Prelude.map entityKey tweetsloggeduserlikeentity
     -- Retweets
-    tweetsretweets <- sequence $ Prelude.map (\tweetid -> runDB $ selectList [TweetParenttweetid ==. (Just tweetid)] []) tweetsids
+    tweetsretweets <- sequence $ Prelude.map retweetsByTweetId tweetsids -- Essa função deve ser mudada
     tweetsloggeduserretweetentity <- runDB $ selectList [TweetUserId ==. tweetsuserid, TweetIsretweet ==. True] []
     tweetsloggeduserretweet <- return $ Prelude.map entityKey tweetsloggeduserretweetentity
+    -- Users
+    tweetsusers <- sequence $ Prelude.map (\userid -> runDB $ selectFirst [UserId ==. userid] []) tweetsusersids
     -- Response
-    sendStatusJSON ok200 (object ["tweets" .= tweets, "tweetlikes" .= tweetslikes, "tweetsretweets" .= tweetsretweets, "tweetsloggeduserlike" .= tweetsloggeduserlike, "tweetsloggeduserretweet" .= tweetsloggeduserretweet, "loggeduser" .= loggeduser, "loggeduserid" .= loggeduserid, "tweetuser" .= user, "tweetuserid" .= tweetsuserid])
+    sendStatusJSON ok200 (object ["tweets" .= tweets, "tweetlikes" .= tweetslikes, "tweetsretweets" .= tweetsretweets, "tweetsusers" .= tweetsusers, "tweetsloggeduserlike" .= tweetsloggeduserlike, "tweetsloggeduserretweet" .= tweetsloggeduserretweet, "loggeduser" .= loggeduser, "loggeduserid" .= loggeduserid, "tweetuser" .= user, "tweetuserid" .= tweetsuserid])
 
 getTweetsUserUnloggedR :: UserId -> Handler Value
 getTweetsUserUnloggedR userid = do
     user <- runDB $ get404 userid 
+    -- Tweets
     tweets <- runDB $ selectList [TweetUserId ==. userid] []
-    sendStatusJSON ok200 (object ["resp" .= tweets, "user" .= user])
+    tweetsids <- return $ Prelude.map entityKey tweets
+    tweetsentities <- return $ Prelude.map entityVal tweets
+    tweetsusersids <- return $ Prelude.map tweetUserId tweetsentities
+    -- Users
+    tweetsusers <- sequence $ Prelude.map (\uid -> runDB $ selectFirst [UserId ==. uid] []) tweetsusersids
+    sendStatusJSON ok200 (object ["resp" .= tweets, "user" .= user, "tweetsusers" .= tweetsusers])
 
 getTweetsHomeR :: UserId -> Handler ()
 getTweetsHomeR userid = return ()

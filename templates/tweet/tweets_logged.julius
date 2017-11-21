@@ -51,27 +51,27 @@ $(document).ready(function(){
        // console.log(data.tweets);
         
         tweeetrows = data.tweets.reduce(function(olddiv,tweet,i){
-           // console.log(data.tweetuser);
+           console.log(data.tweetsusers);
            // console.log(i);
-            
-            if(data.tweetuserid == data.loggeduserid) {
-
-                retweetButton = '';
-
-            } else {
-
-                retweetButton = "<a class='tweet-retweet' data-tweetid='"+tweet.id+"' href='#'>" +
-                                    "<span class='tweet-retweet-number' data-tweetid='"+tweet.id+"' data-retweeted='"+isRetweeted+"'>"+retweets+"</span>"+
-                                    "<i class='fa fa-retweet' aria-hidden='true'></i>" +
-                                    " retweet" +
-                                "</a>";
-            }
 
             isLiked = data.tweetsloggeduserlike.includes(parseInt(tweet.id))? 1 : 0;
             isRetweeted = data.tweetsloggeduserretweet.includes(parseInt(tweet.id))? 1 : 0;
 
             likes = data.tweetlikes[i].length == 0 ? '': data.tweetlikes[i].length;
             retweets = data.tweetsretweets[i].length == 0 ? '': data.tweetsretweets[i].length;
+
+            if(data.tweetsusers[i].id == data.loggeduserid) {
+
+                retweetButton = '';
+
+            } else {
+
+                retweetButton = "<a class='tweet-retweet-"+isRetweeted+"' data-tweetid='"+tweet.id+"' href='#'>" +
+                                    "<span class='tweet-retweet-number' data-tweetid='"+tweet.id+"' data-retweeted='"+isRetweeted+"'>"+retweets+"</span>"+
+                                    "<i class='fa fa-retweet' aria-hidden='true'></i>" +
+                                    " retweet" +
+                                "</a>";
+            }
 
             return "<div class='row tweet-row'>" +
                     "<div class='col-md-8 tweet-col'>" +
@@ -81,12 +81,12 @@ $(document).ready(function(){
                                     "<p>"+tweet.description+"</p>" +
                                     "<footer class='blockquote-footer'>" +
                                     moment(tweet.date.replace(" ","T")).format('DD/MM/YYYY')+
-                                    data.tweetuser.ident +
+                                    data.tweetsusers[i].ident +
                                     "</footer>"+
                                 "</blockquote>" +
                             "</div>" +
                             "<div class='card-footer'>" +
-                                "<a class='tweet-like' data-tweetid='"+tweet.id+"' href='#'>" +
+                                "<a class='tweet-like-"+isLiked+"' data-tweetid='"+tweet.id+"' href='#'>" +
                                     "<span class='tweet-like-number' data-tweetid='"+tweet.id+"' data-liked='"+isLiked+"'>"+likes+"</span>"+
                                     "<i class='fa fa-thumbs-up' aria-hidden='true'></i>" +
                                     " like" +

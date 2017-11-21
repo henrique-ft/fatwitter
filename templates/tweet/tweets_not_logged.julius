@@ -1,19 +1,19 @@
 $(document).ready(function(){
-
-    $.get("@{TweetsUserUnloggedR tweetuserid}", function(data) {
-
-        $("#loading-image").hide();
-
-        console.log(data.resp);
-        
-        tweeetrows = data.resp.reduce(function(olddiv,tweet){
-            console.log(data.user);
-            return '<div class="row tweet-row"><div class="col-md-8 tweet-col"><div class="card"><div class="card-body"><blockquote class="blockquote mb-0"><p>'+ tweet.description +'</p><footer class="blockquote-footer">'+moment(tweet.date.replace(" ","T")).format('DD/MM/YYYY')+' '+data.user.ident+'</footer></blockquote></div></div></div></div>' + olddiv;
-        
-        }, '');
-        
-        console.log(tweeetrows);
-
-        $("#tweet-container").html(tweeetrows);
+    
+        $.get("@{TweetsUserUnloggedR tweetuserid}", function(data) {
+    
+            $("#loading-image").hide();
+    
+            console.log(data.resp);
+            
+            tweeetrows = data.resp.reduce(function(olddiv,tweet,i){
+                console.log(data.user);
+                return '<div class="row tweet-row"><div class="col-md-8 tweet-col"><div class="card"><div class="card-body"><blockquote class="blockquote mb-0"><p>'+ tweet.description +'</p><footer class="blockquote-footer">'+moment(tweet.date.replace(" ","T")).format('DD/MM/YYYY')+' '+data.tweetsusers[i].ident+'</footer></blockquote></div></div></div></div>' + olddiv;
+            
+            }, '');
+            
+            console.log(tweeetrows);
+    
+            $("#tweet-container").html(tweeetrows);
+        });
     });
-});

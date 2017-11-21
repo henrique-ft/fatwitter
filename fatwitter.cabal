@@ -73,7 +73,7 @@ library
       Handler.User
       Helpers.Application
       Helpers.Home
-      Helpers.Tweets
+      Helpers.Tweet
       Helpers.User
       Import
       Import.NoFoundation
