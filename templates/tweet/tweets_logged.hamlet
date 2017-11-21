@@ -1,3 +1,5 @@
+<input type="hidden" name="loggeduserid" val="#{show $ (fromSqlKey loggeduserid) }" id="loggeduseridval">
+
 <div .row>
     <div .col-md-3.col-mother.col-left-fatwitter>
         <div .card>

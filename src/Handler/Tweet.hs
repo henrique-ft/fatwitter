@@ -63,7 +63,7 @@ postCreateTweetR = do
     sendStatusJSON created201 (object ["resp" .= (tweet)])
 
 getTweetsUserLoggedR :: UserId -> UserId -> Handler Value
-getTweetsUserLoggedR tweetsuserid loggeduserid = do
+getTweetsUserLoggedR loggeduserid tweetsuserid = do
     -- Users
     user <- runDB $ get404 tweetsuserid 
     loggeduser <- runDB $ get404 loggeduserid :: Handler User
@@ -90,12 +90,19 @@ getTweetsUserUnloggedR userid = do
 getTweetsHomeR :: UserId -> Handler ()
 getTweetsHomeR userid = return ()
 
-postTweetLikeR :: UserId -> TweetId -> Handler ()
-postTweetLikeR uid tid = return ()
+postTweetLikeR :: UserId -> TweetId -> Handler Value
+postTweetLikeR loggeduserid tweetid = do 
+    tweetlikeid <- runDB $ insert (TweetLike loggeduserid tweetid)
+    sendStatusJSON created201 (object ["resp" .= (fromSqlKey tweetlikeid)])
 
-postTweetUnlikeR :: UserId -> TweetId -> Handler ()
-postTweetUnlikeR uid tid = return ()
+deleteTweetUnlikeR :: UserId -> TweetId -> Handler Value
+deleteTweetUnlikeR loggeduserid tweetid = do
+    runDB $ deleteWhere [TweetLikeUserId ==. loggeduserid, TweetLikeTweetId ==. tweetid]
+    sendStatusJSON noContent204 (object ["userunlikeid" .= loggeduserid, "tweetid" .= tweetid])
 
-postTweetRetweetR :: UserId -> TweetId -> Handler ()
-postTweetRetweetR uid tid = return ()
+postTweetRetweetR :: UserId -> TweetId -> Handler Value
+postTweetRetweetR loggeduserid tweetid = do
+    tweet <- requireJsonBody :: Handler Tweet
+    newTweet <- runDB $ insert tweet
+    sendStatusJSON created201 (object ["resp" .= (tweet)])
 

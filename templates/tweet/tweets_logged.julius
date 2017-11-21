@@ -44,7 +44,7 @@ $('#button-follow').click(function(){
 
 $(document).ready(function(){
 
-    $.get("/tweets/get-logged/9/9", function(data) {
+    $.get("@{TweetsUserLoggedR (loggeduserid) (tweetuserid)}", function(data) {
 
         $("#loading-image").hide();
 
@@ -53,6 +53,19 @@ $(document).ready(function(){
         tweeetrows = data.tweets.reduce(function(olddiv,tweet,i){
            // console.log(data.tweetuser);
            // console.log(i);
+            
+            if(data.tweetuserid == data.loggeduserid) {
+
+                retweetButton = '';
+
+            } else {
+
+                retweetButton = "<a class='tweet-retweet' data-tweetid='"+tweet.id+"' href='#'>" +
+                                    "<span class='tweet-retweet-number' data-tweetid='"+tweet.id+"' data-retweeted='"+isRetweeted+"'>"+retweets+"</span>"+
+                                    "<i class='fa fa-retweet' aria-hidden='true'></i>" +
+                                    " retweet" +
+                                "</a>";
+            }
 
             isLiked = data.tweetsloggeduserlike.includes(parseInt(tweet.id))? 1 : 0;
             isRetweeted = data.tweetsloggeduserretweet.includes(parseInt(tweet.id))? 1 : 0;
@@ -78,11 +91,7 @@ $(document).ready(function(){
                                     "<i class='fa fa-thumbs-up' aria-hidden='true'></i>" +
                                     " like" +
                                 "</a>"+
-                                "<a class='tweet-retweet' data-tweetid='"+tweet.id+"' href='#'>" +
-                                    "<span class='tweet-retweet-number' data-tweetid='"+tweet.id+"' data-retweeted='"+isRetweeted+"'>"+retweets+"</span>"+
-                                    "<i class='fa fa-retweet' aria-hidden='true'></i>" +
-                                    " retweet" +
-                                "</a>"+
+                                retweetButton +
                             "</div>" +
                         "</div>" +
                     "</div>" +
