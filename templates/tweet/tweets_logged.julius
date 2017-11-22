@@ -1,10 +1,12 @@
+$('.nav-link-profile').addClass('active');
+
 /*
 *  Follow and Unfollow a User
 */
 
 $('#button-follow').click(function(){
     
-    if($(this).data().following == 0){
+    if ($(this).data().following == 0) {
 
         $.ajax({
             url: "@{FollowUserR (loggeduserid) (tweetuserid)}",
@@ -36,7 +38,207 @@ $('#button-follow').click(function(){
         $("#followers-number").html(String(subtract - 1));
 
     }
-})
+});
+
+/*
+*  Retweet and Unretweet tweet
+*/
+
+$(document).on('click','.tweet-retweet',function(e){
+    
+        e.preventDefault();
+
+        if ($(this).data().retweeted == 0) {
+    
+            if($(this).data().parenttweetid == null){
+    
+                tweet = {
+                    userId: parseInt($('#loggeduseridval').val()),
+                    description: $("p[class='tweet-description'][data-tweetid="+$(this).data().tweetid+"]").html(),
+                    isretweet: true,
+                    parenttweetid: $(this).data().tweetid,
+                    date: moment().format('YYYY-MM-DD HH:mm:ss'),
+                };
+
+            } else {
+    
+                tweet = {
+                    userId: parseInt($('#loggeduseridval').val()),
+                    description: $("p[class='tweet-description'][data-tweetid="+$(this).data().tweetid+"]").html(),
+                    isretweet: true,
+                    parenttweetid: $(this).data().parenttweetid,
+                    date: moment().format('YYYY-MM-DD HH:mm:ss'),
+                };
+            }
+
+            console.log(tweet);
+    
+            $.ajax({
+                url: "@{TweetRetweetR}",
+                type: "post",
+                dataType: "json",
+                cache: false,
+                contentType:"application/json",
+                data: JSON.stringify(tweet),
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+
+            $(this).addClass('active');
+            $(this).data("retweeted", 1);
+    
+            if (isNaN(parseInt($("span[class='tweet-retweet-number'][data-tweetid="+$(this).data().tweetid+"]").html()))) {
+                
+                $("span[class='tweet-retweet-number'][data-tweetid="+$(this).data().tweetid+"]").html(String(1));
+    
+            } else {
+    
+                sum = parseInt($("span[class='tweet-retweet-number'][data-tweetid="+$(this).data().tweetid+"]").html());
+                $("span[class='tweet-retweet-number'][data-tweetid="+$(this).data().tweetid+"]").html(String(sum + 1));
+            }
+    
+        } else {
+    
+            if($(this).data().parenttweetid == null){
+                
+                tweet = {
+                    userId: parseInt($('#loggeduseridval').val()),
+                    description: $("p[class='tweet-description'][data-tweetid="+$(this).data().tweetid+"]").html(),
+                    isretweet: true,
+                    parenttweetid: $(this).data().tweetid,
+                    date: moment().format('YYYY-MM-DD HH:mm:ss'),
+                };
+
+            } else {
+    
+                tweet = {
+                    userId: parseInt($('#loggeduseridval').val()),
+                    description: $("p[class='tweet-description'][data-tweetid="+$(this).data().tweetid+"]").html(),
+                    isretweet: true,
+                    parenttweetid: $(this).data().parenttweetid,
+                    date: moment().format('YYYY-MM-DD HH:mm:ss'),
+                };
+            }
+
+            console.log(tweet);
+
+            $.ajax({
+                url: "@{TweetUnretweetR}",
+                type: "delete",
+                dataType: "json",
+                cache: false,
+                contentType:"application/json",
+                data: JSON.stringify(tweet),
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+                        
+            $(this).removeClass('active');
+            $(this).data("retweeted", 0);
+
+            if (parseInt($("span[class='tweet-retweet-number'][data-tweetid="+$(this).data().tweetid+"]").html()) == 1) {
+                
+                $("span[class='tweet-retweet-number'][data-tweetid="+$(this).data().tweetid+"]").html('');
+    
+            } else {
+    
+                sum = parseInt($("span[class='tweet-retweet-number'][data-tweetid="+$(this).data().tweetid+"]").html());
+                $("span[class='tweet-retweet-number'][data-tweetid="+$(this).data().tweetid+"]").html(String(sum - 1));
+            }
+        }
+    
+    });
+
+/*
+*  Like and Unlike tweet
+*/
+
+$(document).on('click','.tweet-like',function(e){
+
+    e.preventDefault();
+
+    if ($(this).data().liked == 0) {
+
+        if($(this).data().parenttweetid == null){
+
+            tweetlike = {
+                userId:  parseInt($('#loggeduseridval').val()), 
+                tweetId: parseInt($(this).data().tweetid)
+            };
+
+        } else {
+
+            tweetlike = {
+                userId:  parseInt($('#loggeduseridval').val()), 
+                tweetId: parseInt($(this).data().parenttweetid)
+            };
+        }
+
+        $.ajax({
+                url: "@{TweetLikeR}",
+                type: "post",
+                dataType: "json",
+                cache: false,
+                contentType:"application/json",
+                data: JSON.stringify(tweetlike),
+                success: function (data) {
+                    console.log(data);
+                }
+        });
+
+        $(this).addClass('active');
+        $(this).data("liked", 1);
+
+        if (isNaN(parseInt($("span[class='tweet-like-number'][data-tweetid="+$(this).data().tweetid+"]").html()))) {
+            
+            $("span[class='tweet-like-number'][data-tweetid="+$(this).data().tweetid+"]").html(String(1));
+
+        } else {
+
+            sum = parseInt($("span[class='tweet-like-number'][data-tweetid="+$(this).data().tweetid+"]").html());
+            $("span[class='tweet-like-number'][data-tweetid="+$(this).data().tweetid+"]").html(String(sum + 1));
+        }
+
+    } else {
+
+        tweetunlike = {
+            userId:  parseInt($('#loggeduseridval').val()), 
+            tweetId: parseInt($(this).data().tweetid)
+        };
+
+        $.ajax({
+                url: "@{TweetUnlikeR}",
+                type: "delete",
+                dataType: "json",
+                cache: false,
+                contentType:"application/json",
+                data: JSON.stringify(tweetunlike),
+                success: function (data) {
+                    console.log(data);
+                }
+        });
+                    
+        $(this).removeClass('active');
+        $(this).data("liked", 0);
+
+        if (parseInt($("span[class='tweet-like-number'][data-tweetid="+$(this).data().tweetid+"]").html()) == 1) {
+            
+            $("span[class='tweet-like-number'][data-tweetid="+$(this).data().tweetid+"]").html('');
+
+        } else {
+
+            sum = parseInt($("span[class='tweet-like-number'][data-tweetid="+$(this).data().tweetid+"]").html());
+            $("span[class='tweet-like-number'][data-tweetid="+$(this).data().tweetid+"]").html(String(sum - 1));
+        }
+    }
+
+});
+
+//$('.tweet-like-1').click(function(){});
+
+
 
 /*
 *  Tweets List
@@ -51,26 +253,78 @@ $(document).ready(function(){
        // console.log(data.tweets);
         
         tweeetrows = data.tweets.reduce(function(olddiv,tweet,i){
-           console.log(data.tweetsusers);
-           // console.log(i);
 
-            isLiked = data.tweetsloggeduserlike.includes(parseInt(tweet.id))? 1 : 0;
-            isRetweeted = data.tweetsloggeduserretweet.includes(parseInt(tweet.id))? 1 : 0;
+           // console.log(data.tweetsusers);
+           // console.log(i);
+           console.log(data.tweetsloggeduserretweet);
+           console.log(tweet.id);
+           console.log(data.tweetsloggeduserretweet.includes(parseInt(tweet.id)));
+
+            alikeclass = '';
+
+            if (data.tweetsloggeduserlike.includes(parseInt(tweet.id)) == true) {
+                
+                isLiked = 1;
+                alikeclass = 'active';
+
+            } else {
+
+                isLiked = 0;
+            }
+
+            aretweetclass = '';
+            isRetweeted = 0;
+
+            console.log(tweet);
+
+            if (tweet.parenttweetid != null) {
+                if (data.tweetsloggeduserretweet.includes(parseInt(tweet.parenttweetid)) == true) {
+                    
+                    isRetweeted = 1;
+                    aretweetclass = 'active';
+                    
+                }
+            } else if(data.tweetsloggeduserretweet.includes(parseInt(tweet.id)) == true) {
+                
+                isRetweeted = 1;
+                aretweetclass = 'active';
+
+            }
 
             likes = data.tweetlikes[i].length == 0 ? '': data.tweetlikes[i].length;
             retweets = data.tweetsretweets[i].length == 0 ? '': data.tweetsretweets[i].length;
 
-            if(data.tweetsusers[i].id == data.loggeduserid) {
+            retweetButton = '';
 
-                retweetButton = '';
+            if (data.tweetsusers[i].id == data.loggeduserid) {
+
+                if(retweets != 0) {
+                    retweetButton = "<span class='tweet-retweet-number'>"+retweets+"</span>"+
+                                    "<i class='fa fa-retweet' aria-hidden='true'></i>" +
+                                    " retweet";
+                }
 
             } else {
 
-                retweetButton = "<a class='tweet-retweet-"+isRetweeted+"' data-tweetid='"+tweet.id+"' href='#'>" +
-                                    "<span class='tweet-retweet-number' data-tweetid='"+tweet.id+"' data-retweeted='"+isRetweeted+"'>"+retweets+"</span>"+
+                retweetButton = "<a class='tweet-retweet "+aretweetclass+"' data-parenttweetid='"+tweet.parenttweetid+"' data-tweetid='"+tweet.id+"' data-retweeted='"+isRetweeted+"' href='#'>" +
+                                    "<span class='tweet-retweet-number' data-tweetid='"+tweet.id+"'>"+retweets+"</span>"+
                                     "<i class='fa fa-retweet' aria-hidden='true'></i>" +
                                     " retweet" +
                                 "</a>";
+            }
+        
+            footertweet = "<footer class='blockquote-footer'>" +
+            moment(tweet.date.replace(" ","T")).format('DD/MM/YYYY')+
+            data.tweetsusers[i].ident +
+            "</footer>";
+
+            if (tweet.parenttweetid != null && data.tweetsusers[i].id != data.loggeduserid){
+
+                footertweet = "<footer class='blockquote-footer'>" +
+                                moment(tweet.date.replace(" ","T")).format('DD/MM/YYYY')+
+                                ' retweeted from '+
+                                '<a href="/tweets/'+data.tweetsusers[i].ident +'">'+data.tweetsusers[i].ident +'</a>'+
+                                "</footer>";
             }
 
             return "<div class='row tweet-row'>" +
@@ -78,16 +332,13 @@ $(document).ready(function(){
                         "<div class='card'>" +
                             "<div class='card-body'>" +
                                 "<blockquote class='blockquote mb-0'>" +
-                                    "<p>"+tweet.description+"</p>" +
-                                    "<footer class='blockquote-footer'>" +
-                                    moment(tweet.date.replace(" ","T")).format('DD/MM/YYYY')+
-                                    data.tweetsusers[i].ident +
-                                    "</footer>"+
+                                    "<p class='tweet-description' data-tweetid="+tweet.id+">"+tweet.description+"</p>" +
+                                    footertweet +
                                 "</blockquote>" +
                             "</div>" +
                             "<div class='card-footer'>" +
-                                "<a class='tweet-like-"+isLiked+"' data-tweetid='"+tweet.id+"' href='#'>" +
-                                    "<span class='tweet-like-number' data-tweetid='"+tweet.id+"' data-liked='"+isLiked+"'>"+likes+"</span>"+
+                                "<a class='tweet-like "+alikeclass+"' data-parenttweetid='"+tweet.parenttweetid+"' data-tweetid='"+tweet.id+"' data-liked='"+isLiked+"' href='#'>" +
+                                    "<span class='tweet-like-number' data-tweetid='"+tweet.id+"'>"+likes+"</span>"+
                                     "<i class='fa fa-thumbs-up' aria-hidden='true'></i>" +
                                     " like" +
                                 "</a>"+

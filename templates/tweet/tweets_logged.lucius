@@ -37,8 +37,3 @@
     font-size: 0.8em;
     font-weight: bold;
 }
-
-.tweet-like-1 , .tweet-retweet-1 {
-    
-    color: #007bff !important;
-}

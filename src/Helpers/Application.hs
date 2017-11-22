@@ -21,11 +21,16 @@ baseApplicationLayout = do
 -- Layout principal da aplicação
 applicationLayout :: Widget -> Handler Html
 applicationLayout x = do
-    defaultLayout $ do
-        baseApplicationLayout
-        $(widgetFile "layouts/application")
-        x
-        $(whamletFile "templates/layouts/footer.hamlet")
+    userid <- lookupSession "UserId"
+    case userid of
+        Nothing -> redirectOut
+        Just userid -> do
+            loggeduser <- runDB $ get404 (read (unpack (userid))) :: Handler User
+            defaultLayout $ do
+                baseApplicationLayout
+                $(widgetFile "layouts/application")
+                x
+                $(whamletFile "templates/layouts/footer.hamlet")
 
 -- Layout não logado
 applicationNotLoggedLayout :: Widget -> Handler Html 

@@ -10,7 +10,7 @@
                     Home
                     <i .fa.fa-home aria-hidden="true">
             <li .nav-item.nav-link-profile>        
-                <a .nav-link href=@{HomeR}>
+                <a .nav-link href=@{TweetsPageR (userIdent loggeduser)}>
                     Tweets
                     <i .fa.fa-twitter aria-hidden="true">
             <li .nav-item.nav-link-settings>        

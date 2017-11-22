@@ -74,12 +74,14 @@ getTweetsUserLoggedR loggeduserid tweetsuserid = do
     tweetsentities <- return $ Prelude.map entityVal tweets
     -- Likes
     tweetslikes <- sequence $ Prelude.map likesByTweetId tweetsids 
-    tweetsloggeduserlikeentity <- runDB $ selectList [TweetLikeUserId ==. tweetsuserid] []
-    tweetsloggeduserlike <- return $ Prelude.map entityKey tweetsloggeduserlikeentity
+    tweetsloggeduserlikeentity <- runDB $ selectList [TweetLikeUserId ==. loggeduserid] []
+    tweetsloggeduserlikeval <- return $ Prelude.map entityVal tweetsloggeduserlikeentity
+    tweetsloggeduserlike <- return $ Prelude.map tweetLikeTweetId tweetsloggeduserlikeval
     -- Retweets
     tweetsretweets <- sequence $ Prelude.map retweetsByTweetId tweetsids
-    tweetsloggeduserretweetentity <- runDB $ selectList [TweetUserId ==. tweetsuserid, TweetIsretweet ==. True] []
-    tweetsloggeduserretweet <- return $ Prelude.map entityKey tweetsloggeduserretweetentity
+    tweetsloggeduserretweetentity <- runDB $ selectList [TweetUserId ==. loggeduserid, TweetIsretweet ==. True] []
+    tweetsloggeduserretweetval <- return $ Prelude.map entityVal tweetsloggeduserretweetentity
+    tweetsloggeduserretweet <- return $ Prelude.map tweetParenttweetid tweetsloggeduserretweetval
     -- Users
     tweetsusersids <- sequence $ Prelude.map getTweetUserIdWithRetweetFilter tweetsentities
     tweetsusers <- sequence $ Prelude.map (\userid -> runDB $ selectFirst [UserId ==. userid] []) tweetsusersids
@@ -102,19 +104,27 @@ getTweetsUserUnloggedR userid = do
 getTweetsHomeR :: UserId -> Handler ()
 getTweetsHomeR userid = return ()
 
-postTweetLikeR :: UserId -> TweetId -> Handler Value
-postTweetLikeR loggeduserid tweetid = do 
-    tweetlikeid <- runDB $ insert (TweetLike loggeduserid tweetid)
-    sendStatusJSON created201 (object ["resp" .= (fromSqlKey tweetlikeid)])
+postTweetLikeR :: Handler Value
+postTweetLikeR = do 
+    tweetlike <- requireJsonBody :: Handler TweetLike
+    newTweet <- runDB $ insert tweetlike
+    sendStatusJSON created201 (object ["resp" .= (tweetlike)])
 
-deleteTweetUnlikeR :: UserId -> TweetId -> Handler Value
-deleteTweetUnlikeR loggeduserid tweetid = do
-    runDB $ deleteWhere [TweetLikeUserId ==. loggeduserid, TweetLikeTweetId ==. tweetid]
-    sendStatusJSON noContent204 (object ["userunlikeid" .= loggeduserid, "tweetid" .= tweetid])
+deleteTweetUnlikeR :: Handler Value
+deleteTweetUnlikeR = do
+    tweetunlike <- requireJsonBody :: Handler TweetLike
+    runDB $ deleteWhere [TweetLikeUserId ==. (tweetLikeUserId tweetunlike), TweetLikeTweetId ==. (tweetLikeTweetId tweetunlike)]
+    sendStatusJSON noContent204 (object ["tweetunlike" .= tweetunlike])
 
-postTweetRetweetR :: UserId -> TweetId -> Handler Value
-postTweetRetweetR loggeduserid tweetid = do
+postTweetRetweetR :: Handler Value
+postTweetRetweetR = do
     tweet <- requireJsonBody :: Handler Tweet
     newTweet <- runDB $ insert tweet
     sendStatusJSON created201 (object ["resp" .= (tweet)])
+    
+deleteTweetUnretweetR :: Handler Value
+deleteTweetUnretweetR = do
+    untweet <- requireJsonBody :: Handler Tweet
+    runDB $ deleteWhere [TweetUserId ==. (tweetUserId untweet), TweetParenttweetid ==. (tweetParenttweetid untweet)]
+    sendStatusJSON noContent204 (object ["tweetunretweet" .= untweet])
 
