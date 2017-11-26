@@ -60,8 +60,31 @@ tweetsPageUserNotLogged tweetuserident = do
 postCreateTweetR :: Handler Value
 postCreateTweetR = do
     tweet <- requireJsonBody :: Handler Tweet
-    newTweet <- runDB $ insert tweet
-    sendStatusJSON created201 (object ["resp" .= (tweet)])
+    tweetid <- runDB $ insert tweet
+    sendStatusJSON created201 (object ["resp" .= (tweet),"id" .= tweetid])
+
+getTweetsHomeR :: UserId -> Handler Value
+getTweetsHomeR loggeduserid = do
+    -- Users
+    loggeduser <- runDB $ get404 loggeduserid :: Handler User
+    -- Tweets
+    tweets <- runDB $ (rawSql ("SELECT DISTINCT ?? FROM tweet INNER JOIN user_follower ON user_follower.user_id = tweet.user_id WHERE user_follower.follower_user = "<> (pack $ show $ fromSqlKey loggeduserid) <>" OR tweet.user_id = " <> (pack $ show $ fromSqlKey loggeduserid) <> "ORDER BY tweet.id ASC") [])::Handler [Entity Tweet]
+    tweetsids <- return $ Prelude.map entityKey tweets
+    tweetsentities <- return $ Prelude.map entityVal tweets
+    -- Likes
+    tweetslikes <- sequence $ Prelude.map likesByTweetId tweetsids 
+    tweetsloggeduserlikeentity <- runDB $ selectList [TweetLikeUserId ==. loggeduserid] []
+    tweetsloggeduserlikeval <- return $ Prelude.map entityVal tweetsloggeduserlikeentity
+    tweetsloggeduserlike <- return $ Prelude.map tweetLikeTweetId tweetsloggeduserlikeval
+    -- Retweets
+    tweetsretweets <- sequence $ Prelude.map retweetsByTweetId tweetsids
+    tweetsloggeduserretweetentity <- runDB $ selectList [TweetUserId ==. loggeduserid, TweetIsretweet ==. True] []
+    tweetsloggeduserretweetval <- return $ Prelude.map entityVal tweetsloggeduserretweetentity
+    tweetsloggeduserretweet <- return $ Prelude.map tweetParenttweetid tweetsloggeduserretweetval
+    -- Users
+    tweetsusersids <- sequence $ Prelude.map getTweetUserIdWithRetweetFilter tweetsentities
+    tweetsusers <- sequence $ Prelude.map (\userid -> runDB $ selectFirst [UserId ==. userid] []) tweetsusersids    
+    sendStatusJSON ok200 (object ["tweets" .= tweets, "tweetlikes" .= tweetslikes, "tweetsretweets" .= tweetsretweets, "tweetsusers" .= tweetsusers, "tweetsloggeduserlike" .= tweetsloggeduserlike, "tweetsloggeduserretweet" .= tweetsloggeduserretweet, "loggeduser" .= loggeduser, "loggeduserid" .= loggeduserid])
 
 getTweetsUserLoggedR :: UserId -> UserId -> Handler Value
 getTweetsUserLoggedR loggeduserid tweetsuserid = do
@@ -100,9 +123,6 @@ getTweetsUserUnloggedR userid = do
     -- Users
     tweetsusers <- sequence $ Prelude.map (\uid -> runDB $ selectFirst [UserId ==. uid] []) tweetsusersids
     sendStatusJSON ok200 (object ["resp" .= tweets, "user" .= user, "tweetsusers" .= tweetsusers])
-
-getTweetsHomeR :: UserId -> Handler ()
-getTweetsHomeR userid = return ()
 
 postTweetLikeR :: Handler Value
 postTweetLikeR = do 
