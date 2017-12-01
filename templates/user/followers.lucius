@@ -1,0 +1,38 @@
+.tweet-row{
+    margin: 1em 0;
+}
+
+.tweet-col{
+    padding: 0px;
+}
+
+.tweet-col .card-footer a{
+    margin-right: 1em;
+    color: #717171 !important;
+}
+
+.tweet-col .card-footer a.active{
+    color: #17a2b8 !important;
+}
+
+.tweet-col .card-footer a:hover{
+    color: #17a2b8 !important;
+    text-decoration: none;
+}
+
+.followers-card {
+    padding-top: 10px;
+    font-size: 0.8em;
+    color: gray;
+}
+
+#followers-number, #following-number {
+    color: black;
+    font-weight: bold;
+}
+
+#tweet-like-number, #tweet-retweet-number {
+    padding-right: 0.3em;
+    font-size: 0.8em;
+    font-weight: bold;
+}

@@ -54,6 +54,23 @@ postUpdateUserR :: UserId -> Handler Html
 postUpdateUserR uid = applicationLayout $ do 
     $(widgetFile "user/edit")
 
+getFollowersUserR :: Handler Html
+getFollowersUserR = do 
+    userid <- lookupSession "UserId"
+    case userid of
+        Nothing -> redirectOut
+        Just userid -> do
+            loggeduser <- runDB $ get404 (read (unpack (userid)))
+            followersnumber <- runDB $ count [UserFollowerUserId ==. (read (unpack (userid)))]
+            followingnumber <- runDB $ count [UserFollowerFollowerUser ==. (read (unpack (userid)))]
+            loggeduserid <- return (read (unpack userid)) :: Handler UserId
+            followersuserentity <- runDB $ selectList [UserFollowerUserId ==. (read (unpack (userid)))] []
+            followersusersids <- return $ Prelude.map (\x -> userFollowerFollowerUser (entityVal x)) followersuserentity
+            followersusers <- sequence $ Prelude.map (\followeruserid -> runDB $ get404 followeruserid) followersusersids
+            applicationLayout $ do 
+                $(widgetFile "user/followers")
+
+
 -- API
 
 postFollowUserR :: UserId -> UserId -> Handler Value
