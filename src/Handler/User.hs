@@ -69,6 +69,23 @@ getFollowersUserR = do
             followersusers <- sequence $ Prelude.map (\followeruserid -> runDB $ get404 followeruserid) followersusersids
             applicationLayout $ do 
                 $(widgetFile "user/followers")
+                
+getFollowingsUserR :: Handler Html
+getFollowingsUserR = do
+    userid <- lookupSession "UserId"
+    case userid of
+        Nothing -> redirectOut
+        Just userid -> do
+            loggeduser <- runDB $ get404 (read (unpack (userid)))
+            followersnumber <- runDB $ count [UserFollowerUserId ==. (read (unpack (userid)))]
+            followingnumber <- runDB $ count [UserFollowerFollowerUser ==. (read (unpack (userid)))]
+            loggeduserid <- return (read (unpack userid)) :: Handler UserId
+            followinguserentity <- runDB $ selectList [UserFollowerFollowerUser ==. (read (unpack (userid)))] []
+            followingusersids <- return $ Prelude.map (\x -> userFollowerUserId (entityVal x)) followinguserentity
+            followingusers <- sequence $ Prelude.map (\followeruserid -> runDB $ get404 followeruserid) followingusersids
+            applicationLayout $ do 
+                $(widgetFile "user/followings")
+
 
 
 -- API

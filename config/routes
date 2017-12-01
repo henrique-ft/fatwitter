@@ -16,6 +16,7 @@
 /user/follow/#UserId/#UserId FollowUserR POST
 /user/unfollow/#UserId/#UserId UnfollowUserR DELETE
 /user/followers FollowersUserR GET
+/user/followings FollowingsUserR GET
 
 /tweets/#Text TweetsPageR GET
 /tweets/get-unlogged/#UserId TweetsUserUnloggedR GET

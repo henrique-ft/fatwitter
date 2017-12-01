@@ -1,0 +1,35 @@
+<input type="hidden" name="loggeduserid" value="#{show $ (fromSqlKey loggeduserid) }" id="loggeduseridval">
+
+<div .row>
+    <div .col-md-3.col-mother.col-left-fatwitter>
+        <div .card>
+            <div .card-body>
+                <p .card-text>
+                    #{userIdent loggeduser}
+                <h5 .card-title>
+                    #{userName loggeduser}
+                $maybe description <- userDescription loggeduser
+                    <p .card-text>
+                        <i>
+                            #{description}
+                <p .card-text .followers-card>
+                    <span #following-number>
+                        #{show $ followingnumber}
+                    following /
+                    <span #followers-number>
+                        #{show $ followersnumber}
+                    follower(s)
+    
+    <div .col-md-9.col-mother>
+        <div .row>
+            <div .col-md-8>
+                <ul class="list-group">
+                    $forall following <- followingusers
+                        <li class="list-group-item">
+                            <a href="@{TweetsPageR (userIdent following)}">
+                                #{userIdent following}
+                                            
+
+                            
+              
+            
