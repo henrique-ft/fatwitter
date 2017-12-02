@@ -1,5 +1,7 @@
 $('.nav-link-profile').addClass('active');
 
+
+
 /*
 *  Follow and Unfollow a User
 */
@@ -121,7 +123,7 @@ $(document).on('click','.tweet-retweet',function(e){
                 };
             }
 
-            console.log(tweet);
+            // console.log(tweet);
 
             $.ajax({
                 url: "@{TweetUnretweetR}",
@@ -256,9 +258,9 @@ $(document).ready(function(){
 
            // console.log(data.tweetsusers);
            // console.log(i);
-           console.log(data.tweetsloggeduserretweet);
-           console.log(tweet.id);
-           console.log(data.tweetsloggeduserretweet.includes(parseInt(tweet.id)));
+        //   console.log(data.tweetsloggeduserretweet);
+        //   console.log(tweet.id);
+        //   console.log(data.tweetsloggeduserretweet.includes(parseInt(tweet.id)));
 
             alikeclass = '';
 
@@ -275,7 +277,7 @@ $(document).ready(function(){
             aretweetclass = '';
             isRetweeted = 0;
 
-            console.log(tweet);
+            // console.log(tweet);
 
             if (tweet.parenttweetid != null) {
                 if (data.tweetsloggeduserretweet.includes(parseInt(tweet.parenttweetid)) == true) {
@@ -293,7 +295,9 @@ $(document).ready(function(){
 
             likes = data.tweetlikes[i].length == 0 ? '': data.tweetlikes[i].length;
             retweets = data.tweetsretweets[i].length == 0 ? '': data.tweetsretweets[i].length;
-
+            
+            /* BOTÃO DE RETWEET */
+            
             retweetButton = '';
 
             if (data.tweetsusers[i].id == data.loggeduserid) {
@@ -312,7 +316,23 @@ $(document).ready(function(){
                                     " retweet" +
                                 "</a>";
             }
-        
+            
+            /*-----------------*/
+            
+            /* BOTÃO DE EXCLUIR */
+
+            deletebutton = '';
+            
+            if (data.tweetsusers[i].id == data.loggeduserid && data.loggeduserid == data.tweetuserid) {
+
+                deletebutton = "<a class='tweet-delete' data-tweetid='"+tweet.id+"' href='#'>" +
+                                    "<i class='fa fa-trash' aria-hidden='true'></i>" +
+                                    " delete" +
+                                "</a>";
+            } 
+          
+            /*-----------------*/
+            
             footertweet = "<footer class='blockquote-footer'>" +
             moment(tweet.date.replace(" ","T")).format('DD/MM/YYYY')+
             data.tweetsusers[i].ident +
@@ -327,7 +347,7 @@ $(document).ready(function(){
                                 "</footer>";
             }
 
-            return "<div class='row tweet-row'>" +
+            return "<div class='row tweet-row' data-tweetid='"+tweet.id+"'>" +
                     "<div class='col-md-8 tweet-col'>" +
                         "<div class='card'>" +
                             "<div class='card-body'>" +
@@ -343,6 +363,7 @@ $(document).ready(function(){
                                     " like" +
                                 "</a>"+
                                 retweetButton +
+                                deletebutton +
                             "</div>" +
                         "</div>" +
                     "</div>" +
@@ -356,3 +377,40 @@ $(document).ready(function(){
         $("#tweet-container").html(tweeetrows);
     });
 });
+
+/* DELETA O TWEET */
+
+$(document).on('click','.tweet-delete',function(e){
+
+    e.preventDefault();
+    
+    if(confirm('You really want to delete this tweet?')) {
+
+        tweet = {
+            userId: parseInt($('#loggeduseridval').val()),
+            description: $("p[class='tweet-description'][data-tweetid="+$(this).data().tweetid+"]").html(),
+            isretweet: false,
+            parenttweetid: null,
+            date: moment().format('YYYY-MM-DD HH:mm:ss'),
+        };
+            
+        console.log(tweet);
+
+        $.ajax({
+            url: "@{TweetDeleteR}",
+            type: "delete",
+            dataType: "json",
+            cache: false,
+            contentType:"application/json",
+            data: JSON.stringify(tweet),
+            success: function (data) {
+                console.log(data);
+            }
+        });
+
+        $('div[data-tweetid='+$(this).data().tweetid+']').fadeOut();   
+        
+    }
+});
+
+/*----------------*/

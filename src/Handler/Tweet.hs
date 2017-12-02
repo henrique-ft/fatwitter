@@ -148,3 +148,14 @@ deleteTweetUnretweetR = do
     runDB $ deleteWhere [TweetUserId ==. (tweetUserId untweet), TweetParenttweetid ==. (tweetParenttweetid untweet)]
     sendStatusJSON noContent204 (object ["tweetunretweet" .= untweet])
 
+deleteTweetDeleteR :: Handler Value
+deleteTweetDeleteR = do
+    deletetweetjson <- requireJsonBody :: Handler Tweet
+    deletetweet <- runDB $ selectFirst [TweetUserId ==. (tweetUserId deletetweetjson), TweetDescription ==. (tweetDescription deletetweetjson)] []
+    case deletetweet of
+        Nothing -> notFound 
+        Just (Entity tweetid _) -> do
+            runDB $ deleteWhere [TweetLikeTweetId ==. tweetid]
+            runDB $ deleteWhere [TweetParenttweetid ==. Just tweetid]
+            runDB $ delete tweetid 
+            sendStatusJSON noContent204 (object ["tweetdeleted" .= deletetweetjson])

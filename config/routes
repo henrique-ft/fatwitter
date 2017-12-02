@@ -27,3 +27,4 @@
 /tweet/unlike TweetUnlikeR DELETE
 /tweet/retweet/ TweetRetweetR POST
 /tweet/unretweet/ TweetUnretweetR DELETE
+/tweet/delete/ TweetDeleteR  DELETE

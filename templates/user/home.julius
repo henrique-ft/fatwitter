@@ -41,7 +41,9 @@ var rendertweetslist = function() {
 
             likes = data.tweetlikes[i].length == 0 ? '': data.tweetlikes[i].length;
             retweets = data.tweetsretweets[i].length == 0 ? '': data.tweetsretweets[i].length;
-
+                
+            /* RETWEET BUTTON */
+                
             retweetButton = '';
 
             if (data.tweetsusers[i].id == data.loggeduserid) {
@@ -61,6 +63,22 @@ var rendertweetslist = function() {
                                 "</a>";
             }
         
+            /*-----------------*/
+        
+            /* BOTÃO DE EXCLUIR */
+
+            deletebutton = '';
+            
+            if (data.tweetsusers[i].id == data.loggeduserid) {
+
+                deletebutton = "<a class='tweet-delete' data-tweetid='"+tweet.id+"' href='#'>" +
+                                    "<i class='fa fa-trash' aria-hidden='true'></i>" +
+                                    " delete" +
+                                "</a>";
+            } 
+            
+            /*-----------------*/
+       
             footertweet = "<footer class='blockquote-footer'>" +
             moment(tweet.date.replace(" ","T")).format('DD/MM/YYYY')+
             data.tweetsusers[i].ident +
@@ -75,7 +93,7 @@ var rendertweetslist = function() {
                                 "</footer>";
             }
 
-            return "<div class='row tweet-row'>" +
+            return "<div class='row tweet-row' data-tweetid='"+tweet.id+"'>" +
                     "<div class='col-md-8 tweet-col'>" +
                         "<div class='card'>" +
                             "<div class='card-body'>" +
@@ -91,6 +109,7 @@ var rendertweetslist = function() {
                                     " like" +
                                 "</a>"+
                                 retweetButton +
+                                deletebutton +
                             "</div>" +
                         "</div>" +
                     "</div>" +
@@ -358,3 +377,40 @@ $(document).on('click','.tweet-like',function(e){
 
 
 $(document).ready(rendertweetslist);
+
+/* DELETA O TWEET */
+
+$(document).on('click','.tweet-delete',function(e){
+
+    e.preventDefault();
+    
+    if(confirm('You really want to delete this tweet?')) {
+
+        tweet = {
+            userId: parseInt($('#loggeduseridval').val()),
+            description: $("p[class='tweet-description'][data-tweetid="+$(this).data().tweetid+"]").html(),
+            isretweet: false,
+            parenttweetid: null,
+            date: moment().format('YYYY-MM-DD HH:mm:ss'),
+        };
+            
+        console.log(tweet);
+
+        $.ajax({
+            url: "@{TweetDeleteR}",
+            type: "delete",
+            dataType: "json",
+            cache: false,
+            contentType:"application/json",
+            data: JSON.stringify(tweet),
+            success: function (data) {
+                console.log(data);
+            }
+        });
+
+        $('div[data-tweetid='+$(this).data().tweetid+']').fadeOut();   
+        
+    }
+});
+
+/*----------------*/
