@@ -26,6 +26,7 @@ getHomeUserR = do
             loggeduser <- runDB $ get404 (read (unpack (userid)))
             followersnumber <- runDB $ count [UserFollowerUserId ==. (read (unpack (userid)))]
             followingnumber <- runDB $ count [UserFollowerFollowerUser ==. (read (unpack (userid)))]
+            tweetsnumber <- runDB $ count [TweetUserId ==. (read (unpack (userid))), TweetParenttweetid ==. Nothing]
             loggeduserid <- return (read (unpack userid)) :: Handler UserId
             applicationLayout $ do 
                 $(widgetFile "user/home")
@@ -63,6 +64,7 @@ getFollowersUserR = do
             loggeduser <- runDB $ get404 (read (unpack (userid)))
             followersnumber <- runDB $ count [UserFollowerUserId ==. (read (unpack (userid)))]
             followingnumber <- runDB $ count [UserFollowerFollowerUser ==. (read (unpack (userid)))]
+            tweetsnumber <- runDB $ count [TweetUserId ==. (read (unpack (userid))), TweetParenttweetid ==. Nothing]
             loggeduserid <- return (read (unpack userid)) :: Handler UserId
             followersuserentity <- runDB $ selectList [UserFollowerUserId ==. (read (unpack (userid)))] []
             followersusersids <- return $ Prelude.map (\x -> userFollowerFollowerUser (entityVal x)) followersuserentity
@@ -79,14 +81,13 @@ getFollowingsUserR = do
             loggeduser <- runDB $ get404 (read (unpack (userid)))
             followersnumber <- runDB $ count [UserFollowerUserId ==. (read (unpack (userid)))]
             followingnumber <- runDB $ count [UserFollowerFollowerUser ==. (read (unpack (userid)))]
+            tweetsnumber <- runDB $ count [TweetUserId ==. (read (unpack (userid))), TweetParenttweetid ==. Nothing]
             loggeduserid <- return (read (unpack userid)) :: Handler UserId
             followinguserentity <- runDB $ selectList [UserFollowerFollowerUser ==. (read (unpack (userid)))] []
             followingusersids <- return $ Prelude.map (\x -> userFollowerUserId (entityVal x)) followinguserentity
             followingusers <- sequence $ Prelude.map (\followeruserid -> runDB $ get404 followeruserid) followingusersids
             applicationLayout $ do 
                 $(widgetFile "user/followings")
-
-
 
 -- API
 

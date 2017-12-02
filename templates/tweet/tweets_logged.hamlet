@@ -21,6 +21,9 @@
                 <br>
                 <p .card-text .followers-card>
                     <span #following-number>
+                        #{show $ tweetsnumber}
+                    tweets /
+                    <span #following-number>
                         #{show $ followingnumber}
                     following /
                     <span #followers-number>
