@@ -4,7 +4,14 @@
 
 .navbar-fatwitter{
     background-color: #ffffff !important;
-    border-bottom: 0.2em solid #17a2b8;
+    border-bottom: 0.2em solid #5d5d5d;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    box-shadow: 2px 6px 10px 1px #dcdcdc7a;
+}
+
+.logo-fatwitter{
+    width: 130px;
 }
 
 .nav-link.active {
@@ -15,4 +22,17 @@
     background-color: #f7f7f7;
     border-right: 1px solid #cccccc;
     min-height: 1000px;
+    z-index: -1;
+}
+
+.btn-info {
+    color: #fff;
+    background-color: #4b9bd4 !important;
+    border-color: #4b9bd4 !important;
+}
+
+.btn-info:hover {
+    color: #fff;
+    background-color: #3674a0 !important;
+    border-color: #3674a0 !important;
 }

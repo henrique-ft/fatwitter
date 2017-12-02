@@ -1,7 +1,7 @@
 !!!
 <nav .navbar.navbar-expand-lg.navbar-light.bg-light.navbar-fatwitter>
     <a .navbar-brand>
-        Fatwitter
+        <img .logo-fatwitter src=@{StaticR img_logo_png}> 
     
     <div .collapse.navbar-collapse #navbarSupportedContent>
         <ul .navbar-nav.mr-auto>

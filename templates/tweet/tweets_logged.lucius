@@ -13,11 +13,11 @@
 }
 
 .tweet-col .card-footer a.active{
-    color: #17a2b8 !important;
+    color: #4b9bd4 !important;
 }
 
 .tweet-col .card-footer a:hover{
-    color: #17a2b8 !important;
+    color: #4b9bd4 !important;
     text-decoration: none;
 }
 
