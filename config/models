@@ -2,6 +2,7 @@ User json
     name Text
     ident Text
     password Text
+    color Text
     description Text Maybe
     email Text
     UniqueIdent ident

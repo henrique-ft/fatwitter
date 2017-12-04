@@ -7,6 +7,8 @@ $('#hident3').keyup(function(){
 
 });
 
+$('#hident5').colorPicker();
+
 $('#hident3').keypress(function(e){
 
     var e = e || window.event;

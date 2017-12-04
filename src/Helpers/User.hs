@@ -21,6 +21,7 @@ formUser = renderBootstrap $ User
         <$> areq textField "Name:" Nothing
         <*> areq textField "Nickname (@): " Nothing
         <*> areq passwordField "Password: " Nothing
+        <*> areq textField "Your Color: " Nothing
         <*> aopt textField "Description: " Nothing
         <*> areq emailField  "Email: " Nothing
 
