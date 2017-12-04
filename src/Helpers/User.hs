@@ -5,16 +5,24 @@
 module Helpers.User(formUser, 
                     formAuthUser,
                     AuthUser, 
+                    EditUser,
+                    editUserName,
+                    editUserIdent,
+                    editUserColor,
+                    editUserDescription,
+                    editUserEmail,
                     emailAuthUser, 
                     passwordAuthUser,
                     isLoggedUserFollowing, 
-                    isLoggedUserSameThan)where
+                    isLoggedUserSameThan,
+                    formEditUser)where
 
 import qualified Data.Text as DT
 
 import Import
 
 data AuthUser = AuthUser {emailAuthUser :: Text, passwordAuthUser :: Text} deriving Show
+data EditUser = EditUser {editUserName :: Text, editUserIdent :: Text, editUserColor :: Text, editUserDescription :: (Maybe Text), editUserEmail :: Text}
 
 formUser :: Form User 
 formUser = renderBootstrap $ User 
@@ -24,6 +32,14 @@ formUser = renderBootstrap $ User
         <*> areq textField "Your Color: " Nothing
         <*> aopt textField "Description: " Nothing
         <*> areq emailField  "Email: " Nothing
+
+formEditUser :: User -> Form EditUser 
+formEditUser user = renderBootstrap $ EditUser 
+        <$> areq textField "Name:" (Just (userName user))
+        <*> areq textField "Nickname (@): " (Just (userIdent user))
+        <*> areq textField "Your Color: " (Just (userColor user))
+        <*> aopt textField "Description: " (Just (userDescription user))
+        <*> areq emailField  "Email: " (Just (userEmail user))
 
 formAuthUser :: Form AuthUser 
 formAuthUser = renderBootstrap $ AuthUser 

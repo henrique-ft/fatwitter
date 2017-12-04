@@ -15,7 +15,7 @@
                     Tweets
                     <i .fa.fa-twitter aria-hidden="true">
             <li .nav-item.nav-link-settings>        
-                <a .nav-link href="/">
+                <a .nav-link href="@{EditUserR}">
                     Account
                     <i .fa.fa-user aria-hidden="true">
             <li .nav-item.nav-link-followers>        
@@ -26,7 +26,7 @@
                 <a .nav-link href=@{FollowingsUserR}>
                     Followings
                     <i .fa.fa-user aria-hidden="true">         
-            <li .nav-item.nav-link-settings>        
+            <li .nav-item.nav-link-logout>        
                 <a .nav-link href=@{UserLogoutR}>
                     Logout
                     <i .fa.fa-power-off aria-hidden="true">

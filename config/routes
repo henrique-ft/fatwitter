@@ -11,8 +11,7 @@
 /home HomeUserR GET
 /user/new NewUserR GET
 /user/create CreateUserR POST
-/user/edit EditUserR GET
-/user/update/#UserId UpdateUserR POST
+/user/edit EditUserR GET POST
 /user/follow/#UserId/#UserId FollowUserR POST
 /user/unfollow/#UserId/#UserId UnfollowUserR DELETE
 /user/followers FollowersUserR GET

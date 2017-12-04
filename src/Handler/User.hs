@@ -13,7 +13,14 @@ import Database.Persist.Postgresql
 -- HELPERS
 
 import Helpers.Application (applicationLayout,applicationNotLoggedLayout,redirectOut)
-import Helpers.User (formUser)
+import Helpers.User (formUser, 
+                     EditUser, 
+                     formEditUser,
+                     editUserName,
+                     editUserIdent,
+                     editUserColor,
+                     editUserDescription,
+                     editUserEmail)
 
 -- WEB
 
@@ -48,12 +55,39 @@ postCreateUserR = do
         _ -> redirect NewUserR
 
 getEditUserR :: Handler Html
-getEditUserR = applicationLayout $ do 
-    $(widgetFile "user/edit")
+getEditUserR = do    
+    userid <- lookupSession "UserId"
+    case userid of
+        Nothing -> redirectOut
+        Just userid -> do
+            loggeduser <- runDB $ get404 (read (unpack (userid)))
+            followersnumber <- runDB $ count [UserFollowerUserId ==. (read (unpack (userid)))]
+            followingnumber <- runDB $ count [UserFollowerFollowerUser ==. (read (unpack (userid)))]
+            tweetsnumber <- runDB $ count [TweetUserId ==. (read (unpack (userid))), TweetParenttweetid ==. Nothing]
+            loggeduserid <- return (read (unpack userid)) :: Handler UserId
+            flashmsg <- getMessage
+            (widget,enctype) <- generateFormPost (formEditUser loggeduser)
+            applicationLayout $ do 
+                $(widgetFile "user/edit")
 
-postUpdateUserR :: UserId -> Handler Html
-postUpdateUserR uid = applicationLayout $ do 
-    $(widgetFile "user/edit")
+postEditUserR :: Handler Html
+postEditUserR = do 
+    userid <- lookupSession "UserId"
+    case userid of
+        Nothing -> redirectOut
+        Just userid -> do
+            loggeduser <- runDB $ get404 (read (unpack (userid)))
+            loggeduserid <- return (read (unpack userid)) :: Handler UserId
+            ((result,_),_) <- runFormPost (formEditUser loggeduser)
+            case result of 
+                FormSuccess editUser -> do
+                    runDB $ update loggeduserid [UserName =. (editUserName editUser), UserIdent =. (editUserIdent editUser), UserColor =. (editUserColor editUser), UserDescription =. (editUserDescription editUser), UserEmail =. (editUserEmail editUser)]
+                    setMessage "Usuário editado com sucesso"
+                    redirect EditUserR
+                _ -> do
+                    setMessage "Erro ao editar os dados"
+                    redirect EditUserR
+
 
 getFollowersUserR :: Handler Html
 getFollowersUserR = do 
