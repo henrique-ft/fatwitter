@@ -20,7 +20,9 @@ import Helpers.User (formUser,
                      editUserIdent,
                      editUserColor,
                      editUserDescription,
-                     editUserEmail)
+                     editUserEmail,
+                     validateIdentAlreadyExists,
+                     validateEmailAlreadyExists)
 
 -- WEB
 
@@ -41,17 +43,27 @@ getHomeUserR = do
 getNewUserR :: Handler Html
 getNewUserR = do
     (widget,enctype) <- generateFormPost formUser
+    flashmsg <- getMessage
     applicationNotLoggedLayout $ do 
         $(widgetFile "user/new")
+
 
 postCreateUserR :: Handler Value
 postCreateUserR = do
     ((result,_),_) <- runFormPost formUser
     case result of 
         FormSuccess user -> do 
-            userid <- runDB $ insert user 
-            setSession "UserId" (DT.pack (show userid))
-            redirect HomeUserR
+            validationIdentAlreadyExists <- (validateIdentAlreadyExists user Nothing)
+            case validationIdentAlreadyExists of
+                False -> redirect NewUserR
+                True -> do
+                    validationEmailAlreadyExists <- (validateEmailAlreadyExists user Nothing)
+                    case validationEmailAlreadyExists of
+                        False -> redirect NewUserR
+                        True -> do
+                            userid <- runDB $ insert user 
+                            setSession "UserId" (DT.pack (show userid))
+                            redirect HomeUserR
         _ -> redirect NewUserR
 
 getEditUserR :: Handler Html
@@ -81,9 +93,17 @@ postEditUserR = do
             ((result,_),_) <- runFormPost (formEditUser loggeduser)
             case result of 
                 FormSuccess editUser -> do
-                    runDB $ update loggeduserid [UserName =. (editUserName editUser), UserIdent =. (editUserIdent editUser), UserColor =. (editUserColor editUser), UserDescription =. (editUserDescription editUser), UserEmail =. (editUserEmail editUser)]
-                    setMessage "Usuário editado com sucesso"
-                    redirect EditUserR
+                    validationIdentAlreadyExists <- (validateIdentAlreadyExists loggeduser (Just editUser))
+                    case validationIdentAlreadyExists of
+                        False -> redirect NewUserR
+                        True -> do
+                            validationEmailAlreadyExists <- (validateEmailAlreadyExists loggeduser (Just editUser))
+                            case validationEmailAlreadyExists of
+                                False -> redirect NewUserR
+                                True -> do
+                                    runDB $ update loggeduserid [UserName =. (editUserName editUser), UserIdent =. (editUserIdent editUser), UserColor =. (editUserColor editUser), UserDescription =. (editUserDescription editUser), UserEmail =. (editUserEmail editUser)]
+                                    setMessage "Usuário editado com sucesso"
+                                    redirect EditUserR
                 _ -> do
                     setMessage "Erro ao editar os dados"
                     redirect EditUserR

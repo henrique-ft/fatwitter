@@ -15,7 +15,9 @@ module Helpers.User(formUser,
                     passwordAuthUser,
                     isLoggedUserFollowing, 
                     isLoggedUserSameThan,
-                    formEditUser)where
+                    formEditUser,
+                    validateIdentAlreadyExists,
+                    validateEmailAlreadyExists)where
 
 import qualified Data.Text as DT
 
@@ -64,4 +66,43 @@ isLoggedUserSameThan userid = do
         Nothing -> return False
         Just currentuserid -> return (userid == (read (unpack (currentuserid))))
 
---(read (unpack (lookupSession "UserId")))
+
+-- Validation for ident
+validateIdentAlreadyExists :: User -> Maybe EditUser -> Handler Bool
+validateIdentAlreadyExists user Nothing = do
+    result <- runDB $ selectFirst [UserIdent ==. (userIdent user)] []
+    case result of
+        Nothing -> return True
+        Just user -> do
+            setMessage "This nickname are already in use"
+            return False
+validateIdentAlreadyExists user (Just edituser) = do
+    result <- runDB $ selectFirst [UserIdent ==. (userIdent user)] []
+    case result of
+        Nothing -> return True
+        Just (Entity _ user) -> do
+            case ((userEmail user) == (editUserEmail edituser)) of
+                True -> return True
+                False ->do
+                    setMessage "This nickname are already in use"
+                    return False
+
+-- Validation for email
+validateEmailAlreadyExists :: User -> Maybe EditUser -> Handler Bool
+validateEmailAlreadyExists user Nothing = do
+    result <- runDB $ selectFirst [UserEmail ==. (userEmail user)] []
+    case result of
+        Nothing -> return True
+        Just user -> do
+            setMessage "This email are already in use"
+            return False
+validateEmailAlreadyExists user (Just edituser) = do
+    result <- runDB $ selectFirst [UserEmail ==. (userEmail user)] []
+    case result of
+        Nothing -> return True
+        Just (Entity _ user) -> do
+            case ((userEmail user) == (editUserEmail edituser)) of
+                True -> return True
+                False ->do
+                    setMessage "This email are already in use"
+                    return False

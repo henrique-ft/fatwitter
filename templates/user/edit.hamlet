@@ -27,7 +27,7 @@
     
         $maybe msg <- flashmsg
             <div .row>
-                <p .alert.alert-info> #{msg}
+                <p .alert.alert-warning> #{msg}
             
         <div .row>
             <div .col-md-8 .form-edit-user-col>

@@ -158,8 +158,13 @@ $('#button-tweet-input').click(function(){
                 retweetButton = "<span class='tweet-retweet-number'></span>"+
                 "<i class='fa fa-retweet' aria-hidden='true'></i>" +
                 " retweet";
+    
+                deletebutton = "<a class='tweet-delete' data-tweetid='"+data.id+"' href='#'>" +
+                                    "<i class='fa fa-trash' aria-hidden='true'></i>" +
+                                    " delete" +
+                                "</a>";
 
-                newTweet = "<div class='row tweet-row'>" +
+                newTweet = "<div class='row tweet-row' data-tweetid='"+data.id+"'>" +
                             "<div class='col-md-8 tweet-col'>" +
                                 "<div class='card'>" +
                                     "<div class='card-body'>" +
@@ -175,6 +180,7 @@ $('#button-tweet-input').click(function(){
                                             " like" +
                                         "</a>"+
                                         retweetButton +
+                                        deletebutton +
                                     "</div>" +
                                 "</div>" +
                             "</div>" +

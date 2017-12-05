@@ -26,11 +26,15 @@
     <div .col-md-9.col-mother>
         <div .row>
             <div .col-md-8>
-                <ul class="list-group">
-                    $forall following <- followingusers
-                        <li class="list-group-item">
-                            <a href="@{TweetsPageR (userIdent following)}">
-                                #{userIdent following}
+                $if Prelude.null followingusers
+                    <p .alert.alert-warning>
+                        You are following no one :( !
+                $else
+                    <ul class="list-group">
+                            $forall following <- followingusers
+                                <li class="list-group-item">
+                                    <a href="@{TweetsPageR (userIdent following)}">
+                                        #{userIdent following}
                                             
 
                             

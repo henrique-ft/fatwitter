@@ -1,4 +1,5 @@
 <div .container>
+
     <div .row .form-new-user-row>
         <div .col-md-12>
             <h1>
@@ -8,6 +9,9 @@
                     If you already have a account go to
                     <a href=@{UserLoginR}>
                         login 
+        $maybe msg <- flashmsg
+            <div .col-md-12>
+                <p .alert.alert-warning> #{msg}
         <div .col-md-5>
             <form #new-user-form action=@{CreateUserR} method=post enctype=#{enctype}>
                 ^{widget}
