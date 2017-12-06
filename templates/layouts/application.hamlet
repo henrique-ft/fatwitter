@@ -24,8 +24,8 @@
                     <i .fa.fa-user aria-hidden="true"> 
             <li .nav-item.nav-link-following>        
                 <a .nav-link href=@{FollowingsUserR}>
-                    Followings
-                    <i .fa.fa-user aria-hidden="true">         
+                    Following
+                    <i .fa.fa-user aria-hidden="true">    
             <li .nav-item.nav-link-logout>        
                 <a .nav-link href=@{UserLogoutR}>
                     Logout

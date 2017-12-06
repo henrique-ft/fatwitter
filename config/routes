@@ -12,6 +12,7 @@
 /user/new NewUserR GET
 /user/create CreateUserR POST
 /user/edit EditUserR GET POST
+/user/edit/profile-image EditProfileImageR POST
 /user/follow/#UserId/#UserId FollowUserR POST
 /user/unfollow/#UserId/#UserId UnfollowUserR DELETE
 /user/followers FollowersUserR GET

@@ -22,7 +22,8 @@ import Helpers.User (formUser,
                      editUserDescription,
                      editUserEmail,
                      validateIdentAlreadyExists,
-                     validateEmailAlreadyExists)
+                     validateEmailAlreadyExists,
+                     formUploadProfileImage)
 
 -- WEB
 
@@ -79,6 +80,7 @@ getEditUserR = do
             loggeduserid <- return (read (unpack userid)) :: Handler UserId
             flashmsg <- getMessage
             (widget,enctype) <- generateFormPost (formEditUser loggeduser)
+            (widgetProfileImage, enctypeProfileImage) <- generateFormPost formUploadProfileImage
             applicationLayout $ do 
                 $(widgetFile "user/edit")
 
@@ -95,17 +97,36 @@ postEditUserR = do
                 FormSuccess editUser -> do
                     validationIdentAlreadyExists <- (validateIdentAlreadyExists loggeduser (Just editUser))
                     case validationIdentAlreadyExists of
-                        False -> redirect NewUserR
+                        False -> redirect EditUserR
                         True -> do
                             validationEmailAlreadyExists <- (validateEmailAlreadyExists loggeduser (Just editUser))
                             case validationEmailAlreadyExists of
-                                False -> redirect NewUserR
+                                False -> redirect EditUserR
                                 True -> do
                                     runDB $ update loggeduserid [UserName =. (editUserName editUser), UserIdent =. (editUserIdent editUser), UserColor =. (editUserColor editUser), UserDescription =. (editUserDescription editUser), UserEmail =. (editUserEmail editUser)]
-                                    setMessage "Usuário editado com sucesso"
+                                    setMessage "Success! User edited"
                                     redirect EditUserR
                 _ -> do
-                    setMessage "Erro ao editar os dados"
+                    setMessage "An unexpected error occurred !"
+                    redirect EditUserR
+
+postEditProfileImageR :: Handler Html 
+postEditProfileImageR = do 
+    userid <- lookupSession "UserId"
+    case userid of
+        Nothing -> redirectOut
+        Just userid -> do
+            loggeduser <- runDB $ get404 (read (unpack (userid))) :: Handler User
+            loggeduserid <- return (read (unpack userid)) :: Handler UserId
+            ((result,_),_) <- runFormPost formUploadProfileImage
+            case result of 
+                FormSuccess file -> do 
+                    liftIO $ fileMove file ("static/img/users/" Prelude.++ (unpack $ fileName file))
+                    runDB $ update loggeduserid [UserProfileimage =. (Just (fileName file))]
+                    setMessage "Success! Profile user image edited"
+                    redirect EditUserR
+                _ -> do
+                    setMessage "An unexpected error occurred !"
                     redirect EditUserR
 
 
@@ -142,7 +163,7 @@ getFollowingsUserR = do
             followingusers <- sequence $ Prelude.map (\followeruserid -> runDB $ get404 followeruserid) followingusersids
             applicationLayout $ do 
                 $(widgetFile "user/followings")
-
+                
 -- API
 
 postFollowUserR :: UserId -> UserId -> Handler Value

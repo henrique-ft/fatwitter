@@ -2,6 +2,7 @@
 {-# LANGUAGE QuasiQuotes           #-}
 {-# LANGUAGE TemplateHaskell       #-}
 {-# LANGUAGE TypeFamilies          #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 module Helpers.User(formUser, 
                     formAuthUser,
                     AuthUser, 
@@ -17,7 +18,8 @@ module Helpers.User(formUser,
                     isLoggedUserSameThan,
                     formEditUser,
                     validateIdentAlreadyExists,
-                    validateEmailAlreadyExists)where
+                    validateEmailAlreadyExists,
+                    formUploadProfileImage)where
 
 import qualified Data.Text as DT
 
@@ -25,6 +27,18 @@ import Import
 
 data AuthUser = AuthUser {emailAuthUser :: Text, passwordAuthUser :: Text} deriving Show
 data EditUser = EditUser {editUserName :: Text, editUserIdent :: Text, editUserColor :: Text, editUserDescription :: (Maybe Text), editUserEmail :: Text}
+
+-- Forms
+
+formUploadProfileImage :: Form FileInfo
+formUploadProfileImage = renderDivs $ areq fileField 
+                           FieldSettings{fsId=Just "hident1",
+                                         fsLabel="Arquivo: ",
+                                         fsTooltip= Nothing,
+                                         fsName= Nothing,
+                                         fsAttrs=[("accept","image/jpeg")]} 
+                           Nothing
+
 
 formUser :: Form User 
 formUser = renderBootstrap $ User 
@@ -34,6 +48,7 @@ formUser = renderBootstrap $ User
         <*> areq textField "Your Color: " Nothing
         <*> aopt textField "Description: " Nothing
         <*> areq emailField  "Email: " Nothing
+        <*> aopt hiddenField "" Nothing
 
 formEditUser :: User -> Form EditUser 
 formEditUser user = renderBootstrap $ EditUser 
@@ -47,6 +62,8 @@ formAuthUser :: Form AuthUser
 formAuthUser = renderBootstrap $ AuthUser 
         <$> areq emailField  "Email: " Nothing
         <*> areq passwordField "Password: " Nothing
+
+-- Others
 
 isLoggedUserFollowing :: UserId -> Handler Bool
 isLoggedUserFollowing userid = do
@@ -74,17 +91,17 @@ validateIdentAlreadyExists user Nothing = do
     case result of
         Nothing -> return True
         Just user -> do
-            setMessage "This nickname are already in use"
+            setMessage "This nickname are already in use !"
             return False
-validateIdentAlreadyExists user (Just edituser) = do
-    result <- runDB $ selectFirst [UserIdent ==. (userIdent user)] []
+validateIdentAlreadyExists loggeduser (Just edituser) = do
+    result <- runDB $ selectFirst [UserIdent ==. (editUserIdent edituser)] []
     case result of
         Nothing -> return True
         Just (Entity _ user) -> do
-            case ((userEmail user) == (editUserEmail edituser)) of
+            case ((userIdent user) == (userIdent loggeduser)) of
                 True -> return True
-                False ->do
-                    setMessage "This nickname are already in use"
+                False -> do
+                    setMessage "This nickname are already in use !"
                     return False
 
 -- Validation for email
@@ -94,15 +111,15 @@ validateEmailAlreadyExists user Nothing = do
     case result of
         Nothing -> return True
         Just user -> do
-            setMessage "This email are already in use"
+            setMessage "This email are already in use !"
             return False
-validateEmailAlreadyExists user (Just edituser) = do
-    result <- runDB $ selectFirst [UserEmail ==. (userEmail user)] []
+validateEmailAlreadyExists loggeduser (Just edituser) = do
+    result <- runDB $ selectFirst [UserEmail ==. (editUserEmail edituser)] []
     case result of
         Nothing -> return True
         Just (Entity _ user) -> do
-            case ((userEmail user) == (editUserEmail edituser)) of
+            case ((userEmail user) == (userEmail loggeduser)) of
                 True -> return True
                 False ->do
-                    setMessage "This email are already in use"
+                    setMessage "This email are already in use !"
                     return False

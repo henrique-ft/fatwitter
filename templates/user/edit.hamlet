@@ -4,6 +4,11 @@
     <div .col-md-3.col-mother.col-left-fatwitter>
         <div .card>
             <div .card-body>
+                $maybe image <- userProfileimage loggeduser
+                    <img .profile-image src="/static/img/users/#{image}" alt="..." class="img-thumbnail">
+                $nothing
+                    <img .profile-image src=@{StaticR img_nouser_jpg} alt="..." class="img-thumbnail">
+                    
                 <p .card-text>
                     #{userIdent loggeduser}
                 <h5 .card-title>
@@ -28,9 +33,25 @@
         $maybe msg <- flashmsg
             <div .row>
                 <p .alert.alert-warning> #{msg}
-            
+
         <div .row>
             <div .col-md-8 .form-edit-user-col>
+                <h3>
+                    Profile Image
+                <p>
+                    * You can add a profile image here, choose a file and click in upload.
+                <form #upload-image-form action=@{EditProfileImageR} method=post enctype=#{enctypeProfileImage}>
+                    ^{widgetProfileImage}
+                    <button type="submit" .btn .btn-info .float-right>
+                        Upload
+        <br>
+        <br>
+        <div .row>
+            <div .col-md-8 .form-edit-user-col>
+                <h3>
+                    Profile Info
+                <p>
+                    * You can edit your profile info here.
                 <form #edit-user-form action=@{EditUserR} method=post enctype=#{enctype}>
                     ^{widget}
                     <button type="submit" .btn .btn-info .float-right>

@@ -4,6 +4,12 @@
     <div .col-md-3.col-mother.col-left-fatwitter>
         <div .card>
             <div .card-body>
+
+                $maybe image <- userProfileimage loggeduser
+                    <img .profile-image src="/static/img/users/#{image}" alt="..." class="img-thumbnail">
+                $nothing
+                    <img .profile-image src=@{StaticR img_nouser_jpg} alt="..." class="img-thumbnail">
+
                 <p .card-text>
                     #{userIdent loggeduser}
                 <h5 .card-title>
@@ -35,6 +41,10 @@
                                 <li class="list-group-item">
                                     <a href="@{TweetsPageR (userIdent following)}">
                                         #{userIdent following}
+                                    - #{userName following}
+                                    
+                                    
+                                    
                                             
 
                             

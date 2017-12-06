@@ -5,6 +5,7 @@ User json
     color Text
     description Text Maybe
     email Text
+    profileimage Text Maybe
     UniqueIdent ident
     deriving Typeable
     deriving Show

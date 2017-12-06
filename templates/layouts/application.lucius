@@ -36,3 +36,8 @@
     background-color: #3674a0 !important;
     border-color: #3674a0 !important;
 }
+
+.profile-image {
+
+    margin-bottom: 1em;
+}
